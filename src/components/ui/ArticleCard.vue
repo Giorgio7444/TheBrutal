@@ -69,6 +69,7 @@
 import { computed } from 'vue'
 import UserAvatar from './UserAvatar.vue'
 import TagBadge from './TagBadge.vue'
+import { formatDate } from '@/lib/utils'
 
 const props = defineProps({
   article: {
@@ -80,14 +81,4 @@ const props = defineProps({
 const likeCount = computed(() => {
   return props.article.likes?.[0]?.count || 0
 })
-
-const formatDate = (dateString) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('it-IT', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
 </script>

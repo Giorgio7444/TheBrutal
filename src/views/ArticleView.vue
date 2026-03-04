@@ -149,6 +149,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
+import { formatDate } from '@/lib/utils'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 import TagBadge from '@/components/ui/TagBadge.vue'
 
@@ -211,15 +212,5 @@ const deleteArticle = async () => {
   } catch (err) {
     console.error('Delete article error:', err)
   }
-}
-
-const formatDate = (dateString) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('it-IT', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
 }
 </script>

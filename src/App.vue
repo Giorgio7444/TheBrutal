@@ -35,11 +35,7 @@ onMounted(async () => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
-
-* {
-  font-family: 'DM Sans', sans-serif;
-}
+/* Font già caricati in index.html — nessun @import duplicato */
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;

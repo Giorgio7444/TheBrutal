@@ -2,17 +2,44 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+export default defineConfig(({ mode }) => {
+  const plugins = [vue()]
+
+  // Devtools solo in sviluppo
+  if (mode === 'development') {
+    import('vite-plugin-vue-devtools').then(m => plugins.push(m.default()))
+  }
+
+  return {
+    plugins,
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      },
     },
-  },
+    build: {
+      // Chunk splitting per vendor pesanti
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vue-vendor': ['vue', 'vue-router', 'pinia'],
+            'supabase': ['@supabase/supabase-js'],
+            'editor': [
+              '@tiptap/vue-3',
+              '@tiptap/starter-kit',
+              '@tiptap/extension-image',
+              '@tiptap/extension-link',
+              '@tiptap/extension-placeholder',
+            ],
+          },
+        },
+      },
+      // Target moderno per bundle più piccoli
+      target: 'es2020',
+      // Compressione CSS
+      cssMinify: true,
+    },
+  }
 })

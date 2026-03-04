@@ -49,21 +49,31 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  // Scroll to top on navigation
+  scrollBehavior(_to, _from, savedPosition) {
+    return savedPosition || { top: 0 }
+  },
 })
 
-router.beforeEach(async (to, from, next) => {
+// Promise che si risolve quando l'auth è pronta
+let authReady = null
+
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
 
-  // Wait for auth to initialize
+  // Attendi che l'auth sia inizializzata (senza polling)
   if (authStore.loading) {
-    await new Promise(resolve => {
-      const interval = setInterval(() => {
-        if (!authStore.loading) {
-          clearInterval(interval)
-          resolve()
-        }
-      }, 50)
-    })
+    if (!authReady) {
+      authReady = new Promise(resolve => {
+        const unwatch = authStore.$subscribe((_mutation, state) => {
+          if (!state.loading) {
+            unwatch()
+            resolve()
+          }
+        })
+      })
+    }
+    await authReady
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {

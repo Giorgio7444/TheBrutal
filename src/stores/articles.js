@@ -171,55 +171,33 @@ export const useArticlesStore = defineStore('articles', () => {
     }
   }
 
-  const uploadCoverImage = async (file) => {
+  const uploadToStorage = async (bucket, file) => {
     try {
       error.value = null
 
       const fileExt = file.name.split('.').pop()
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
 
       const { error: uploadErr } = await supabase.storage
-        .from('article-covers')
+        .from(bucket)
         .upload(fileName, file)
 
       if (uploadErr) throw uploadErr
 
       const { data } = supabase.storage
-        .from('article-covers')
+        .from(bucket)
         .getPublicUrl(fileName)
 
       return data.publicUrl
     } catch (err) {
       error.value = err.message
-      console.error('Upload cover error:', err)
+      console.error(`Upload to ${bucket} error:`, err)
       throw err
     }
   }
 
-  const uploadImage = async (file) => {
-    try {
-      error.value = null
-
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`
-
-      const { error: uploadErr } = await supabase.storage
-        .from('article-images')
-        .upload(fileName, file)
-
-      if (uploadErr) throw uploadErr
-
-      const { data } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(fileName)
-
-      return data.publicUrl
-    } catch (err) {
-      error.value = err.message
-      console.error('Upload image error:', err)
-      throw err
-    }
-  }
+  const uploadCoverImage = (file) => uploadToStorage('article-covers', file)
+  const uploadImage = (file) => uploadToStorage('article-images', file)
 
   const toggleLike = async (articleId, userId) => {
     try {
