@@ -1,0 +1,40 @@
+<template>
+  <img
+    v-if="avatarUrl"
+    :src="avatarUrl"
+    :alt="username"
+    class="rounded-full object-cover"
+    :class="sizeClasses"
+  />
+  <div
+    v-else
+    :class="[sizeClasses, 'rounded-full bg-teal-600 dark:bg-teal-600 flex items-center justify-center text-white font-bold']"
+  >
+    {{ (username || 'U')[0].toUpperCase() }}
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  avatarUrl: String,
+  username: String,
+  size: {
+    type: String,
+    default: 'md',
+    validator: (v) => ['xs', 'sm', 'md', 'lg', 'xl'].includes(v),
+  },
+})
+
+const sizeClasses = computed(() => {
+  const sizes = {
+    xs: 'w-6 h-6 text-xs',
+    sm: 'w-8 h-8 text-sm',
+    md: 'w-10 h-10 text-base',
+    lg: 'w-12 h-12 text-lg',
+    xl: 'w-16 h-16 text-2xl',
+  }
+  return sizes[props.size]
+})
+</script>
