@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-4xl">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="font-serif text-4xl font-bold text-neutral-950 dark:text-white mb-2">
+        <h1 class="font-sans text-4xl font-bold text-neutral-950 dark:text-white mb-2">
           {{ isEditing ? 'Modifica articolo' : 'Scrivi un nuovo articolo' }}
         </h1>
         <p class="text-neutral-600 dark:text-neutral-400">
@@ -19,7 +19,7 @@
             v-model="formData.title"
             type="text"
             placeholder="Titolo dell'articolo"
-            class="w-full text-4xl font-serif font-bold text-neutral-950 dark:text-white bg-transparent placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none mb-4"
+            class="w-full text-4xl font-sans font-bold text-neutral-950 dark:text-white bg-transparent placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none mb-4"
             required
           />
           <div class="h-1 bg-gradient-to-r from-teal-600 to-transparent" />

@@ -25,7 +25,7 @@
       </div>
 
       <!-- Title -->
-      <h3 class="font-serif text-lg font-bold text-neutral-950 dark:text-white mb-2 line-clamp-2">
+      <h3 class="font-sans text-lg font-bold text-neutral-950 dark:text-white mb-2 line-clamp-2">
         {{ article.title }}
       </h3>
 

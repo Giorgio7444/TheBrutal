@@ -1,22 +1,19 @@
 <template>
   <nav class="fixed top-0 z-50 w-full bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 transition-colors">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
+    <div class="w-full px-[5vw]">
+      <div class="flex items-center justify-between h-12">
         <!-- Logo -->
         <router-link
           to="/"
           class="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <div class="w-8 h-8 bg-gradient-to-br from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 rounded-lg flex items-center justify-center text-white font-serif font-bold">
-            E
-          </div>
-          <span class="font-serif text-lg font-bold text-neutral-950 dark:text-white hidden sm:block">
-            Estetica Digitale
+          <span class="font-sans text-lg font-bold text-neutral-950 dark:text-white hidden sm:block">
+            The Brutal
           </span>
         </router-link>
 
         <!-- Center Navigation -->
-        <div class="hidden md:flex items-center gap-6">
+        <div class="hidden md:flex items-right gap-6">
           <router-link
             to="/"
             class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
@@ -29,6 +26,18 @@
           >
             Categorie
           </a>
+          <router-link
+            to="/manifesto"
+            class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
+          >
+            Manifesto
+          </router-link>
+          <router-link
+            to="/excursus"
+            class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
+          >
+            Excursus
+          </router-link>
         </div>
 
         <!-- Right Section -->

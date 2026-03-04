@@ -21,7 +21,7 @@
             />
           </div>
 
-          <h1 class="font-serif text-5xl md:text-6xl font-bold text-neutral-950 dark:text-white mb-6">
+          <h1 class="font-sans text-5xl md:text-6xl font-bold text-neutral-950 dark:text-white mb-6">
             {{ article.title }}
           </h1>
 
@@ -35,7 +35,7 @@
             <div>
               <router-link
                 :to="`/profile/${article.profiles?.username}`"
-                class="font-medium text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                class="font-sans text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
               >
                 {{ article.profiles?.username }}
               </router-link>
@@ -114,7 +114,7 @@
             <div class="flex-1">
               <router-link
                 :to="`/profile/${article.profiles?.username}`"
-                class="font-serif text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                class="font-sans text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
               >
                 {{ article.profiles?.username }}
               </router-link>
@@ -130,7 +130,7 @@
     <!-- Not Found -->
     <div v-else class="flex items-center justify-center min-h-screen">
       <div class="text-center">
-        <h2 class="font-serif text-3xl font-bold text-neutral-950 dark:text-white mb-4">
+        <h2 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-4">
           Articolo non trovato
         </h2>
         <router-link

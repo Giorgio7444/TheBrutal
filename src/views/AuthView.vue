@@ -4,11 +4,11 @@
       <!-- Header -->
       <div class="text-center mb-12">
         <div class="flex justify-center mb-4">
-          <div class="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 rounded-lg flex items-center justify-center text-white font-serif text-xl font-bold">
+          <div class="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 rounded-lg flex items-center justify-center text-white font-sans text-xl font-bold">
             E
           </div>
         </div>
-        <h1 class="font-serif text-3xl font-bold text-neutral-950 dark:text-white mb-2">
+        <h1 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-2">
           Estetica Digitale
         </h1>
         <p class="text-neutral-600 dark:text-neutral-400">

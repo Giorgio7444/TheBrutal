@@ -4,7 +4,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- About -->
         <div>
-          <h3 class="font-serif text-lg font-bold mb-4 text-neutral-950 dark:text-white">
+          <h3 class="font-sans text-lg font-bold mb-4 text-neutral-950 dark:text-white">
             Estetica Digitale
           </h3>
           <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">

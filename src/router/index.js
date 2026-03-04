@@ -34,6 +34,16 @@ const routes = [
     name: 'Auth',
     component: () => import('@/views/AuthView.vue'),
   },
+  {
+    path: '/manifesto',
+    name: 'Manifesto',
+    component: () => import('@/views/ManifestoView.vue'),
+  },
+  {
+    path: '/excursus',
+    name: 'Excursus',
+    component: () => import('@/views/ExcursusView.vue'),
+  },
 ]
 
 const router = createRouter({

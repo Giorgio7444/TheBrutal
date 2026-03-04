@@ -49,7 +49,7 @@
           </div>
 
           <div v-else>
-            <h1 class="font-serif text-4xl font-bold text-neutral-950 dark:text-white mb-3">
+            <h1 class="font-sans text-4xl font-bold text-neutral-950 dark:text-white mb-3">
               {{ profile.username }}
             </h1>
             <p class="text-neutral-600 dark:text-neutral-400 text-lg mb-6">
@@ -68,7 +68,7 @@
 
         <!-- Articles Section -->
         <div>
-          <h2 class="font-serif text-3xl font-bold text-neutral-950 dark:text-white mb-8">
+          <h2 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-8">
             Articoli
           </h2>
 
@@ -92,7 +92,7 @@
     <!-- Not Found -->
     <div v-else class="flex items-center justify-center min-h-screen">
       <div class="text-center">
-        <h2 class="font-serif text-3xl font-bold text-neutral-950 dark:text-white mb-4">
+        <h2 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-4">
           Profilo non trovato
         </h2>
         <router-link

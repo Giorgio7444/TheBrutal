@@ -4,11 +4,11 @@
     <div class="border-b border-neutral-200 dark:border-neutral-800 py-20 px-4">
       <div class="mx-auto max-w-7xl">
         <div class="text-center mb-12">
-          <h1 class="font-serif text-5xl md:text-6xl font-bold text-neutral-950 dark:text-white mb-4">
-            Estetica Digitale
+          <h1 class="font-sans text-5xl md:text-6xl font-bold text-neutral-950 dark:text-white mb-4">
+            The Brutal List
           </h1>
           <p class="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            Scopri e condividi riflessioni sulla bellezza, il design e la comunicazione nel mondo digitale
+            Un luogo in cui potrai scoprire un nuovo punto di vista, quello dei Post Brutalisti. Gli articoli presenti in questa sezione hanno l'obiettivo di incentivare, esplorare ed espandere la causa Post Brutalista.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ import ArticleCard from '@/components/ui/ArticleCard.vue'
 const articlesStore = useArticlesStore()
 const articles = ref([])
 const selectedTags = ref([])
-const popularTags = ref(['Design', 'Estetica', 'Digitale', 'UX', 'Tipografia', 'Colore'])
+const popularTags = ref(['Design System', 'Estetica', 'Tipografia', 'Composizione', 'Ispirazione', 'Teoria e Tecnica'])
 
 onMounted(async () => {
   await fetchArticles()
