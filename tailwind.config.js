@@ -25,19 +25,7 @@ export default {
       fontFamily: {
         'sans': ['DM Sans', 'sans-serif'],
       },
-      fontSize: {
-        'prose': '18px',
-      },
-      lineHeight: {
-        'prose': '1.8',
-      },
-      maxWidth: {
-        'prose': '680px',
-      },
-      spacing: {
-        'prose-x': '2rem',
-        'prose-y': '1.5rem',
-      },
+
     },
   },
   plugins: [
