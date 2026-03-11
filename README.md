@@ -1,4 +1,4 @@
-# The Brutal — Estetica Digitale
+# The Brutal — The Brutalist
 
 Piattaforma editoriale per il Post-Brutalismo digitale. Progetto d'esame — LABA Brescia, Progettazione Multimediale.
 

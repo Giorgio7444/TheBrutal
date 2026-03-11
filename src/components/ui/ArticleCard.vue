@@ -1,7 +1,7 @@
 <template>
-  <router-link
-    :to="`/article/${article.id}`"
-    class="group block overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+  <div
+    @click="router.push(`/article/${article.id}`)"
+    class="group block overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
   >
     <!-- Cover Image -->
     <div v-if="article.cover_url" class="relative h-48 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
@@ -62,14 +62,17 @@
         </div>
       </div>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import UserAvatar from './UserAvatar.vue'
 import TagBadge from './TagBadge.vue'
 import { formatDate } from '@/lib/utils'
+
+const router = useRouter()
 
 const props = defineProps({
   article: {
