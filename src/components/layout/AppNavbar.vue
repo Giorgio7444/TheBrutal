@@ -20,12 +20,12 @@
           >
             Articoli
           </router-link>
-          <a
-            href="#"
+          <router-link
+            to="/"
             class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
           >
             Categorie
-          </a>
+          </router-link>
           <router-link
             to="/manifesto"
             class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"

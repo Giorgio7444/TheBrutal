@@ -58,7 +58,7 @@
         <!-- Content -->
         <div
           class="prose dark:prose-invert prose-neutral max-w-none mb-12"
-          v-html="article.content"
+          v-html="sanitizedContent"
         />
 
         <!-- Like & Actions -->
@@ -147,6 +147,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import DOMPurify from 'dompurify'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
 import { formatDate } from '@/lib/utils'
@@ -161,6 +162,10 @@ const articlesStore = useArticlesStore()
 const article = ref(null)
 const isLiked = ref(false)
 const likeCount = ref(0)
+
+const sanitizedContent = computed(() => {
+  return article.value?.content ? DOMPurify.sanitize(article.value.content) : ''
+})
 
 const isAuthor = computed(() => {
   return authStore.isAuthenticated && authStore.user?.id === article.value?.author_id

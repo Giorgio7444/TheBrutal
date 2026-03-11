@@ -44,6 +44,11 @@ const routes = [
     name: 'Excursus',
     component: () => import('@/views/ExcursusView.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFoundView.vue'),
+  },
 ]
 
 const router = createRouter({

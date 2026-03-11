@@ -4,12 +4,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(async ({ mode }) => {
   const plugins = [vue()]
 
   // Devtools solo in sviluppo
   if (mode === 'development') {
-    import('vite-plugin-vue-devtools').then(m => plugins.push(m.default()))
+    const { default: VueDevTools } = await import('vite-plugin-vue-devtools')
+    plugins.push(VueDevTools())
   }
 
   return {

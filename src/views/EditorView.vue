@@ -174,7 +174,13 @@ onMounted(async () => {
         router.push('/')
         return
       }
-      formData.value = { ...article }
+      formData.value = {
+        title: article.title || '',
+        excerpt: article.excerpt || '',
+        content: article.content || '',
+        cover_url: article.cover_url || '',
+        tags: article.tags || [],
+      }
       tagsInput.value = article.tags?.join(', ') || ''
     } catch (err) {
       console.error('Load article error:', err)
@@ -253,7 +259,11 @@ const publishArticle = async (published) => {
 
   try {
     const articleData = {
-      ...formData.value,
+      title: formData.value.title,
+      excerpt: formData.value.excerpt,
+      content: formData.value.content,
+      cover_url: formData.value.cover_url,
+      tags: formData.value.tags,
       published,
       author_id: authStore.user.id,
     }
