@@ -1,15 +1,55 @@
 <template>
   <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4">
     <div class="mx-auto max-w-4xl">
-      <!-- Header -->
-      <div class="mb-8">
-        <h1 class="font-sans text-4xl font-bold text-neutral-950 dark:text-white mb-2">
-          {{ isEditing ? 'Modifica articolo' : 'Scrivi un nuovo articolo' }}
-        </h1>
-        <p class="text-neutral-600 dark:text-neutral-400">
-          Condividi le tue riflessioni e idee con la comunità
-        </p>
+      <!-- Success Overlay (FEAT 1) -->
+      <div v-if="publishedArticle" class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-950/60 backdrop-blur-sm">
+        <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-8 max-w-md w-full mx-4 text-center">
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-950 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-neutral-950 dark:text-white mb-2" style="font-family: 'Playfair Display', serif;">
+            Articolo pubblicato
+          </h2>
+          <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+            {{ publishedArticle.title }}
+          </p>
+          <div class="flex flex-col gap-3">
+            <router-link
+              :to="`/article/${publishedArticle.id}`"
+              class="px-6 py-3 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition-colors font-medium"
+            >
+              Visualizza articolo
+            </router-link>
+            <button
+              @click="writeAnother"
+              class="px-6 py-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors font-medium text-neutral-950 dark:text-white"
+            >
+              Scrivi un altro
+            </button>
+          </div>
+        </div>
       </div>
+
+      <!-- Loading Skeleton (BUG 8) -->
+      <div v-if="isLoading" class="space-y-6 animate-pulse">
+        <div class="h-10 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
+        <div class="h-20 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
+        <div class="h-64 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
+        <div class="h-40 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
+      </div>
+
+      <template v-else>
+        <!-- Header -->
+        <div class="mb-8">
+          <h1 class="font-sans text-4xl font-bold text-neutral-950 dark:text-white mb-2">
+            {{ isEditing ? 'Modifica articolo' : 'Scrivi un nuovo articolo' }}
+          </h1>
+          <p class="text-neutral-600 dark:text-neutral-400">
+            Condividi le tue riflessioni e idee con la comunità
+          </p>
+        </div>
 
       <!-- Form -->
       <form @submit.prevent="handlePublish" class="space-y-6">
@@ -62,6 +102,7 @@
                 type="button"
                 @click="removeCover"
                 class="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                aria-label="Rimuovi immagine di copertina"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
@@ -88,6 +129,9 @@
             v-model="formData.content"
             @image-upload="handleImageUpload"
           />
+          <p v-if="contentError" class="mt-2 text-sm text-red-600 dark:text-red-400">
+            {{ contentError }}
+          </p>
         </div>
 
         <!-- Tags -->
@@ -136,6 +180,7 @@
           </button>
         </div>
       </form>
+      </template>
     </div>
   </div>
 </template>
@@ -145,16 +190,21 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
+import { useToast } from '@/composables/useToast'
 import TiptapEditor from '@/components/editor/TiptapEditor.vue'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const articlesStore = useArticlesStore()
+const toast = useToast()
 
 const editorRef = ref(null)
 const coverInput = ref(null)
 const tagsInput = ref('')
+const isLoading = ref(false)
+const contentError = ref('')
+const publishedArticle = ref(null)
 
 const formData = ref({
   title: '',
@@ -167,7 +217,9 @@ const formData = ref({
 const isEditing = computed(() => !!route.params.id)
 
 onMounted(async () => {
+  document.title = isEditing.value ? 'Modifica articolo — The Brutal' : 'Nuovo articolo — The Brutal'
   if (isEditing.value) {
+    isLoading.value = true
     try {
       const article = await articlesStore.fetchArticleById(route.params.id)
       if (article.author_id !== authStore.user.id) {
@@ -184,7 +236,10 @@ onMounted(async () => {
       tagsInput.value = article.tags?.join(', ') || ''
     } catch (err) {
       console.error('Load article error:', err)
+      toast.error('Errore nel caricamento dell\'articolo')
       router.push('/')
+    } finally {
+      isLoading.value = false
     }
   }
 })
@@ -208,7 +263,7 @@ const handleCoverUpload = async (event) => {
       formData.value.cover_url = url
     } catch (err) {
       console.error('Cover upload error:', err)
-      alert('Errore nel caricamento dell\'immagine')
+      toast.error('Errore nel caricamento dell\'immagine')
     }
   }
   coverInput.value.value = ''
@@ -226,7 +281,7 @@ const handleImageUpload = async (file) => {
     }
   } catch (err) {
     console.error('Image upload error:', err)
-    alert('Errore nel caricamento dell\'immagine')
+    toast.error('Errore nel caricamento dell\'immagine')
   }
 }
 
@@ -247,13 +302,17 @@ const handlePublish = async () => {
 }
 
 const publishArticle = async (published) => {
+  contentError.value = ''
+
   if (!formData.value.title.trim()) {
-    alert('Inserisci un titolo')
+    toast.error('Inserisci un titolo')
     return
   }
 
-  if (!formData.value.content.trim()) {
-    alert('Scrivi il contenuto dell\'articolo')
+  // BUG 6: validate content length
+  const plainText = editorRef.value?.editor?.getText()?.trim() || ''
+  if (plainText.length <= 50) {
+    contentError.value = 'Il contenuto deve essere di almeno 50 caratteri.'
     return
   }
 
@@ -268,19 +327,33 @@ const publishArticle = async (published) => {
       author_id: authStore.user.id,
     }
 
-    let articleId
+    let result
     if (isEditing.value) {
-      await articlesStore.updateArticle(route.params.id, articleData)
-      articleId = route.params.id
+      result = await articlesStore.updateArticle(route.params.id, articleData)
+      result = { ...result, id: route.params.id }
     } else {
-      const result = await articlesStore.createArticle(articleData)
-      articleId = result.id
+      result = await articlesStore.createArticle(articleData)
     }
 
-    router.push(`/article/${articleId}`)
+    if (published) {
+      publishedArticle.value = { id: result.id, title: formData.value.title }
+    } else {
+      toast.success('Bozza salvata con successo')
+      router.push(`/article/${result.id}`)
+    }
   } catch (err) {
     console.error('Publish error:', err)
-    alert('Errore nella pubblicazione dell\'articolo')
+    if (err.message?.includes('unique') || err.message?.includes('duplicate')) {
+      toast.error('Esiste già un articolo con questo titolo. Scegli un titolo diverso.')
+    } else {
+      toast.error('Errore nella pubblicazione dell\'articolo')
+    }
   }
+}
+
+const writeAnother = () => {
+  publishedArticle.value = null
+  formData.value = { title: '', excerpt: '', content: '', cover_url: '', tags: [] }
+  tagsInput.value = ''
 }
 </script>

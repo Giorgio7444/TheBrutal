@@ -23,7 +23,10 @@ import Placeholder from '@tiptap/extension-placeholder'
 import EditorToolbar from './EditorToolbar.vue'
 
 const props = defineProps({
-  modelValue: String,
+  modelValue: {
+    type: String,
+    default: '',
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'image-upload'])

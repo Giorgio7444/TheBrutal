@@ -70,29 +70,23 @@ const router = createRouter({
   },
 })
 
-// Promise che si risolve quando l'auth è pronta
-let authReady = null
-
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
 
   // Attendi che l'auth sia inizializzata (senza polling)
   if (authStore.loading) {
-    if (!authReady) {
-      authReady = new Promise(resolve => {
-        const unwatch = authStore.$subscribe((_mutation, state) => {
-          if (!state.loading) {
-            unwatch()
-            resolve()
-          }
-        })
+    await new Promise(resolve => {
+      const unwatch = authStore.$subscribe((_mutation, state) => {
+        if (!state.loading) {
+          unwatch()
+          resolve()
+        }
       })
-    }
-    await authReady
+    })
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ name: 'Auth', query: { redirect: to.fullPath } })
+    next({ name: 'Auth', query: { redirect: to.fullPath, reason: 'login_required' } })
   } else if (to.name === 'Auth' && authStore.isAuthenticated) {
     next({ name: 'Home' })
   } else {

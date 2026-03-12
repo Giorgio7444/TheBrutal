@@ -251,6 +251,7 @@ const loadArticle = async () => {
   if (placeholderArticlesData[articleId]) {
     article.value = placeholderArticlesData[articleId]
     likeCount.value = article.value.likes?.[0]?.count || 0
+    document.title = `${article.value.title} — The Brutal`
     return
   }
 
@@ -258,6 +259,7 @@ const loadArticle = async () => {
     const data = await articlesStore.fetchArticleById(articleId)
     article.value = data
     likeCount.value = data.likes?.[0]?.count || 0
+    document.title = `${data.title} — The Brutal`
 
     if (authStore.isAuthenticated) {
       isLiked.value = await articlesStore.checkIfLiked(data.id, authStore.user.id)

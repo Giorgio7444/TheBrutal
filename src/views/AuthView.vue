@@ -16,6 +16,14 @@
         </p>
       </div>
 
+      <!-- Login Required Banner -->
+      <div
+        v-if="route.query.reason === 'login_required'"
+        class="mb-6 p-4 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400 text-sm"
+      >
+        Devi accedere per poter scrivere articoli.
+      </div>
+
       <!-- Error Alert -->
       <div
         v-if="authStore.error"
@@ -130,7 +138,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -140,6 +148,10 @@ const route = useRoute()
 
 const email = ref('')
 const password = ref('')
+
+onMounted(() => {
+  document.title = 'Accedi — The Brutal'
+})
 
 const signInWithGoogle = async () => {
   try {

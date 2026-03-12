@@ -25,9 +25,14 @@
       </div>
 
       <!-- Title -->
-      <h3 class="font-sans text-lg font-bold text-neutral-950 dark:text-white mb-2 line-clamp-2">
+      <h3 class="font-sans text-lg font-bold text-neutral-950 dark:text-white mb-1 line-clamp-2">
         {{ article.title }}
       </h3>
+
+      <!-- Reading time -->
+      <p class="text-xs text-neutral-500 dark:text-neutral-500 mb-2">
+        ~{{ readingTime }} min di lettura
+      </p>
 
       <!-- Excerpt -->
       <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4 line-clamp-2">
@@ -83,5 +88,11 @@ const props = defineProps({
 
 const likeCount = computed(() => {
   return props.article.likes?.[0]?.count || 0
+})
+
+const readingTime = computed(() => {
+  const excerptLen = (props.article.excerpt || '').length
+  const estimatedLength = excerptLen * 10
+  return Math.max(1, Math.ceil(estimatedLength / 1500))
 })
 </script>

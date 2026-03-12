@@ -56,7 +56,7 @@
         </div>
 
         <!-- Load More Button -->
-        <div v-if="articlesStore.hasMore" class="flex justify-center mt-12">
+        <div v-if="articlesStore.hasMore && !usingPlaceholders" class="flex justify-center mt-12">
           <button
             @click="loadMore"
             :disabled="articlesStore.loading"
@@ -149,9 +149,11 @@ const route = useRoute()
 const articlesStore = useArticlesStore()
 const articles = ref([])
 const selectedTags = ref([])
+const usingPlaceholders = ref(false)
 const popularTags = ref(['Design System', 'Estetica', 'Tipografia', 'Composizione', 'Ispirazione', 'Teoria e Tecnica'])
 
 onMounted(async () => {
+  document.title = 'Articoli — The Brutal'
   if (route.query.tag) {
     selectedTags.value = [route.query.tag]
   }
@@ -161,10 +163,17 @@ onMounted(async () => {
 const fetchArticles = async () => {
   try {
     const data = await articlesStore.fetchPublishedArticles(selectedTags.value, 0)
-    articles.value = data && data.length > 0 ? data : getFilteredPlaceholders()
+    if (data && data.length > 0) {
+      articles.value = data
+      usingPlaceholders.value = false
+    } else {
+      articles.value = getFilteredPlaceholders()
+      usingPlaceholders.value = true
+    }
   } catch (err) {
     console.error('Fetch articles error:', err)
     articles.value = getFilteredPlaceholders()
+    usingPlaceholders.value = true
   }
 }
 

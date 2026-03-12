@@ -111,6 +111,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
+import { useToast } from '@/composables/useToast'
 import { supabase } from '@/lib/supabase'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 import ArticleCard from '@/components/ui/ArticleCard.vue'
@@ -118,6 +119,7 @@ import ArticleCard from '@/components/ui/ArticleCard.vue'
 const route = useRoute()
 const authStore = useAuthStore()
 const articlesStore = useArticlesStore()
+const toast = useToast()
 
 const profile = ref(null)
 const userArticles = ref([])
@@ -133,6 +135,7 @@ const isOwnProfile = computed(() => {
 })
 
 onMounted(async () => {
+  document.title = 'Profilo — The Brutal'
   await loadProfile()
 })
 
@@ -188,7 +191,7 @@ const saveProfile = async () => {
     isEditing.value = false
   } catch (err) {
     console.error('Save profile error:', err)
-    alert('Errore nel salvataggio del profilo')
+    toast.error('Errore nel salvataggio del profilo')
   }
 }
 </script>
