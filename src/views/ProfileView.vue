@@ -107,8 +107,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
 import { useToast } from '@/composables/useToast'
@@ -118,6 +118,7 @@ import UserAvatar from '@/components/ui/UserAvatar.vue'
 import ArticleCard from '@/components/ui/ArticleCard.vue'
 
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 const articlesStore = useArticlesStore()
 const toast = useToast()
@@ -138,6 +139,21 @@ const isOwnProfile = computed(() => {
 onMounted(async () => {
   document.title = 'Profilo — The Brutal'
   await loadProfile()
+})
+
+watch(() => route.params.username, async () => {
+  await loadProfile()
+})
+
+watch(() => authStore.profile, (newProfile) => {
+  if (!newProfile || !isOwnProfile.value) return
+  profile.value = newProfile
+  if (!isEditing.value) {
+    editData.value = {
+      username: newProfile.username,
+      bio: newProfile.bio || '',
+    }
+  }
 })
 
 const loadProfile = async () => {
@@ -183,9 +199,35 @@ const cancelEdit = () => {
 
 const saveProfile = async () => {
   try {
-    await authStore.updateProfile(editData.value)
+    if (!profile.value) return
+
+    const nextUsername = editData.value.username.trim()
+    if (!nextUsername) {
+      toast.error('Inserisci un nome utente valido')
+      return
+    }
+
+    if (nextUsername !== profile.value.username) {
+      const snapshot = await getDocs(
+        query(collection(db, 'profiles'), where('username', '==', nextUsername), limit(1))
+      )
+      const existing = snapshot.docs[0]
+      if (existing && existing.id !== profile.value.id) {
+        toast.error('Nome utente gia in uso')
+        return
+      }
+    }
+
+    await authStore.updateProfile({
+      ...editData.value,
+      username: nextUsername,
+    })
     profile.value = authStore.profile
     isEditing.value = false
+
+    if (nextUsername !== route.params.username) {
+      router.replace(`/profile/${nextUsername}`)
+    }
   } catch (err) {
     console.error('Save profile error:', err)
     toast.error('Errore nel salvataggio del profilo')

@@ -65,9 +65,10 @@
         <div class="flex items-center gap-4 py-6 border-t border-neutral-200 dark:border-neutral-800">
           <button
             @click="toggleLike"
-            :disabled="!authStore.isAuthenticated"
+            :disabled="!authStore.isAuthenticated || isPlaceholder"
             :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors',
+              isPlaceholder ? 'opacity-60 cursor-not-allowed' : '',
               isLiked
                 ? 'bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400'
                 : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800'
@@ -162,6 +163,7 @@ const articlesStore = useArticlesStore()
 const article = ref(null)
 const isLiked = ref(false)
 const likeCount = ref(0)
+const isPlaceholder = ref(false)
 
 const placeholderArticlesData = {
   'placeholder-1': {
@@ -249,11 +251,14 @@ const loadArticle = async () => {
 
   // Check if it's a placeholder article
   if (placeholderArticlesData[articleId]) {
+    isPlaceholder.value = true
     article.value = placeholderArticlesData[articleId]
     likeCount.value = article.value.likes?.[0]?.count || 0
     document.title = `${article.value.title} — The Brutal`
     return
   }
+
+  isPlaceholder.value = false
 
   try {
     const data = await articlesStore.fetchArticleById(articleId)
@@ -270,6 +275,7 @@ const loadArticle = async () => {
 }
 
 const toggleLike = async () => {
+  if (isPlaceholder.value) return
   if (!authStore.isAuthenticated) {
     router.push('/auth')
     return

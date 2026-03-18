@@ -156,6 +156,8 @@ onMounted(() => {
 const signInWithGoogle = async () => {
   try {
     await authStore.signInWithGoogle()
+    const redirect = route.query.redirect || '/'
+    router.push(redirect)
   } catch (err) {
     console.error('Google sign in failed:', err)
   }
@@ -164,6 +166,8 @@ const signInWithGoogle = async () => {
 const signInWithGithub = async () => {
   try {
     await authStore.signInWithGithub()
+    const redirect = route.query.redirect || '/'
+    router.push(redirect)
   } catch (err) {
     console.error('GitHub sign in failed:', err)
   }

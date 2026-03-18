@@ -191,6 +191,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
 import { useToast } from '@/composables/useToast'
+import { isStorageEnabled } from '@/lib/firebase'
 import TiptapEditor from '@/components/editor/TiptapEditor.vue'
 
 const route = useRoute()
@@ -205,6 +206,8 @@ const tagsInput = ref('')
 const isLoading = ref(false)
 const contentError = ref('')
 const publishedArticle = ref(null)
+const storageEnabled = isStorageEnabled
+const storageWarning = 'Storage non configurato: upload immagini disabilitato'
 
 const formData = ref({
   title: '',
@@ -252,10 +255,19 @@ watch(() => tagsInput.value, (newVal) => {
 })
 
 const triggerCoverUpload = () => {
+  if (!storageEnabled) {
+    toast.error(storageWarning)
+    return
+  }
   coverInput.value?.click()
 }
 
 const handleCoverUpload = async (event) => {
+  if (!storageEnabled) {
+    toast.error(storageWarning)
+    if (coverInput.value) coverInput.value.value = ''
+    return
+  }
   const file = event.target.files?.[0]
   if (file) {
     try {
@@ -274,6 +286,10 @@ const removeCover = () => {
 }
 
 const handleImageUpload = async (file) => {
+  if (!storageEnabled) {
+    toast.error(storageWarning)
+    return
+  }
   try {
     const url = await articlesStore.uploadImage(file)
     if (editorRef.value?.editor) {

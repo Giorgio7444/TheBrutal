@@ -1,15 +1,7 @@
 <script setup>
-import { onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
 import AppNavbar from '@/components/layout/AppNavbar.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
-
-const authStore = useAuthStore()
-
-onMounted(async () => {
-  await authStore.initializeAuth()
-})
 </script>
 
 <template>

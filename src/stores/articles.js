@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { db, storage } from '@/lib/firebase'
+import { db, storage, isStorageEnabled } from '@/lib/firebase'
 import {
   collection,
   doc,
@@ -227,6 +227,10 @@ export const useArticlesStore = defineStore('articles', () => {
   const uploadToStorage = async (bucket, file) => {
     try {
       error.value = null
+
+      if (!isStorageEnabled || !storage) {
+        throw new Error('Storage not configured')
+      }
 
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`

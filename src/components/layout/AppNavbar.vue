@@ -114,7 +114,7 @@
               Scrivi
             </router-link>
             <!-- User dropdown -->
-            <div class="relative" ref="dropdownRef">
+            <div v-if="isProfileReady" class="relative" ref="dropdownRef">
               <button
                 @click="isMenuOpen = !isMenuOpen"
                 class="flex items-center gap-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
@@ -155,6 +155,9 @@
                 </button>
               </div>
             </div>
+            <div v-else class="px-3 py-2 text-sm text-neutral-500 dark:text-neutral-400">
+              Caricamento...
+            </div>
           </div>
 
           <router-link
@@ -191,7 +194,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 
@@ -201,6 +204,7 @@ const isDark = ref(false)
 const isMenuOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const dropdownRef = ref(null)
+const isProfileReady = computed(() => !!authStore.profile?.username)
 
 const mobileLinks = [
   { to: '/articles', label: 'Articoli' },

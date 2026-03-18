@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { auth, db, storage } from '@/lib/firebase'
+import { auth, db, storage, isStorageEnabled } from '@/lib/firebase'
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -225,6 +225,10 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       if (!user.value) throw new Error('No user logged in')
       error.value = null
+
+      if (!isStorageEnabled || !storage) {
+        throw new Error('Storage not configured')
+      }
 
       const fileExt = file.name.split('.').pop()
       const fileName = `${user.value.id}-${Date.now()}.${fileExt}`
