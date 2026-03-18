@@ -112,7 +112,8 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
 import { useToast } from '@/composables/useToast'
-import { supabase } from '@/lib/supabase'
+import { db } from '@/lib/firebase'
+import { collection, query, where, getDocs, limit } from 'firebase/firestore'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 import ArticleCard from '@/components/ui/ArticleCard.vue'
 
@@ -151,15 +152,11 @@ const loadProfile = async () => {
         bio: authStore.profile.bio || '',
       }
     } else {
-      const { data, error: err } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('username', route.params.username)
-        .single()
-      if (err && err.code !== 'PGRST116') {
-        console.error('Load profile by username error:', err)
-      }
-      profile.value = data || null
+      const snapshot = await getDocs(
+        query(collection(db, 'profiles'), where('username', '==', route.params.username), limit(1))
+      )
+      const docSnap = snapshot.docs[0]
+      profile.value = docSnap ? { id: docSnap.id, ...docSnap.data() } : null
     }
 
     if (profile.value) {

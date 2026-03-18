@@ -1,6 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { supabase } from '@/lib/supabase'
+import { db, storage } from '@/lib/firebase'
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  setDoc,
+  serverTimestamp,
+  getCountFromServer,
+} from 'firebase/firestore'
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export const useArticlesStore = defineStore('articles', () => {
   const articles = ref([])
@@ -9,44 +27,97 @@ export const useArticlesStore = defineStore('articles', () => {
   const hasMore = ref(true)
   const currentPage = ref(0)
   const pageSize = 12
+  const pageCursors = ref([])
+  const lastQueryKey = ref('')
+  const profileCache = new Map()
+
+  const buildQueryKey = (tags) => tags.slice().sort().join('|')
+
+  const normalizeDates = (data) => {
+    const createdAt = data.created_at?.toDate ? data.created_at.toDate().toISOString() : data.created_at || null
+    const updatedAt = data.updated_at?.toDate ? data.updated_at.toDate().toISOString() : data.updated_at || null
+    return { ...data, created_at: createdAt, updated_at: updatedAt }
+  }
+
+  const fetchProfileById = async (userId) => {
+    if (!userId) return null
+    if (profileCache.has(userId)) return profileCache.get(userId)
+
+    const snapshot = await getDoc(doc(db, 'profiles', userId))
+    if (!snapshot.exists()) return null
+
+    const data = { id: snapshot.id, ...snapshot.data() }
+    profileCache.set(userId, data)
+    return data
+  }
+
+  const fetchLikesCount = async (articleId) => {
+    const likesRef = collection(db, 'articles', articleId, 'likes')
+    const snapshot = await getCountFromServer(likesRef)
+    return snapshot.data().count || 0
+  }
+
+  const hydrateArticle = async (docSnap) => {
+    const raw = normalizeDates(docSnap.data())
+    const profile = await fetchProfileById(raw.author_id)
+    const likesCount = await fetchLikesCount(docSnap.id)
+
+    return {
+      id: docSnap.id,
+      ...raw,
+      profiles: profile,
+      likes: [{ count: likesCount }],
+    }
+  }
 
   const fetchPublishedArticles = async (tags = [], page = 0) => {
     try {
       loading.value = true
       error.value = null
-      
-      let query = supabase
-        .from('articles')
-        .select(
-          `
-          *,
-          profiles:author_id(id, username, avatar_url),
-          likes(count)
-          `,
-          { count: 'exact' }
-        )
-        .eq('published', true)
-        .order('created_at', { ascending: false })
-        .range(page * pageSize, (page + 1) * pageSize - 1)
+
+      const queryKey = buildQueryKey(tags)
+      if (page === 0 || queryKey !== lastQueryKey.value) {
+        lastQueryKey.value = queryKey
+        pageCursors.value = []
+        currentPage.value = 0
+        hasMore.value = true
+      }
+
+      const constraints = [
+        where('published', '==', true),
+        orderBy('created_at', 'desc'),
+        limit(pageSize),
+      ]
 
       if (tags.length > 0) {
-        query = query.contains('tags', tags)
+        constraints.push(where('tags', 'array-contains-any', tags))
       }
 
-      const { data, error: err, count } = await query
+      if (page > 0 && pageCursors.value[page - 1]) {
+        constraints.push(startAfter(pageCursors.value[page - 1]))
+      }
 
-      if (err) throw err
+      const snapshot = await getDocs(query(collection(db, 'articles'), ...constraints))
+      const docs = snapshot.docs
+      if (docs.length > 0) {
+        pageCursors.value[page] = docs[docs.length - 1]
+      }
+
+      let data = await Promise.all(docs.map(hydrateArticle))
+      if (tags.length > 0) {
+        data = data.filter((article) => tags.every((tag) => article.tags?.includes(tag)))
+      }
 
       if (page === 0) {
-        articles.value = data || []
+        articles.value = data
       } else {
-        articles.value.push(...(data || []))
+        articles.value.push(...data)
       }
 
-      hasMore.value = articles.value.length < (count || 0)
+      hasMore.value = docs.length === pageSize
       currentPage.value = page
-      
-      return data || []
+
+      return data
     } catch (err) {
       error.value = err.message
       console.error('Fetch articles error:', err)
@@ -61,20 +132,12 @@ export const useArticlesStore = defineStore('articles', () => {
       loading.value = true
       error.value = null
 
-      const { data, error: err } = await supabase
-        .from('articles')
-        .select(
-          `
-          *,
-          profiles:author_id(id, username, avatar_url, bio),
-          likes(count)
-          `
-        )
-        .eq('id', id)
-        .single()
+      const snapshot = await getDoc(doc(db, 'articles', id))
+      if (!snapshot.exists()) {
+        throw new Error('Article not found')
+      }
 
-      if (err) throw err
-      return data
+      return await hydrateArticle(snapshot)
     } catch (err) {
       error.value = err.message
       console.error('Fetch article error:', err)
@@ -89,20 +152,12 @@ export const useArticlesStore = defineStore('articles', () => {
       loading.value = true
       error.value = null
 
-      const { data, error: err } = await supabase
-        .from('articles')
-        .select(
-          `
-          *,
-          profiles:author_id(id, username, avatar_url),
-          likes(count)
-          `
-        )
-        .eq('author_id', userId)
-        .order('created_at', { ascending: false })
+      const snapshot = await getDocs(
+        query(collection(db, 'articles'), where('author_id', '==', userId), orderBy('created_at', 'desc'))
+      )
 
-      if (err) throw err
-      return data || []
+      const data = await Promise.all(snapshot.docs.map(hydrateArticle))
+      return data
     } catch (err) {
       error.value = err.message
       console.error('Fetch user articles error:', err)
@@ -116,14 +171,19 @@ export const useArticlesStore = defineStore('articles', () => {
     try {
       error.value = null
 
-      const { data, error: err } = await supabase
-        .from('articles')
-        .insert([articleData])
-        .select()
-        .single()
+      const nowIso = new Date().toISOString()
+      const docRef = await addDoc(collection(db, 'articles'), {
+        ...articleData,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      })
 
-      if (err) throw err
-      return data
+      return {
+        id: docRef.id,
+        ...articleData,
+        created_at: nowIso,
+        updated_at: nowIso,
+      }
     } catch (err) {
       error.value = err.message
       console.error('Create article error:', err)
@@ -135,18 +195,17 @@ export const useArticlesStore = defineStore('articles', () => {
     try {
       error.value = null
 
-      const { data, error: err } = await supabase
-        .from('articles')
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', id)
-        .select()
-        .single()
+      const nowIso = new Date().toISOString()
+      await updateDoc(doc(db, 'articles', id), {
+        ...updates,
+        updated_at: serverTimestamp(),
+      })
 
-      if (err) throw err
-      return data
+      return {
+        id,
+        ...updates,
+        updated_at: nowIso,
+      }
     } catch (err) {
       error.value = err.message
       console.error('Update article error:', err)
@@ -157,13 +216,7 @@ export const useArticlesStore = defineStore('articles', () => {
   const deleteArticle = async (id) => {
     try {
       error.value = null
-
-      const { error: err } = await supabase
-        .from('articles')
-        .delete()
-        .eq('id', id)
-
-      if (err) throw err
+      await deleteDoc(doc(db, 'articles', id))
     } catch (err) {
       error.value = err.message
       console.error('Delete article error:', err)
@@ -177,18 +230,10 @@ export const useArticlesStore = defineStore('articles', () => {
 
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
+      const fileRef = storageRef(storage, `${bucket}/${fileName}`)
 
-      const { error: uploadErr } = await supabase.storage
-        .from(bucket)
-        .upload(fileName, file)
-
-      if (uploadErr) throw uploadErr
-
-      const { data } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(fileName)
-
-      return data.publicUrl
+      await uploadBytes(fileRef, file)
+      return await getDownloadURL(fileRef)
     } catch (err) {
       error.value = err.message
       console.error(`Upload to ${bucket} error:`, err)
@@ -203,37 +248,21 @@ export const useArticlesStore = defineStore('articles', () => {
     try {
       error.value = null
 
-      // Check if already liked
-      const { data: existingLike, error: fetchErr } = await supabase
-        .from('likes')
-        .select('*')
-        .eq('article_id', articleId)
-        .eq('user_id', userId)
-        .single()
+      const likeRef = doc(db, 'articles', articleId, 'likes', userId)
+      const snapshot = await getDoc(likeRef)
 
-      if (fetchErr && fetchErr.code !== 'PGRST116') {
-        throw fetchErr
-      }
-
-      if (existingLike) {
-        // Unlike
-        const { error: deleteErr } = await supabase
-          .from('likes')
-          .delete()
-          .eq('article_id', articleId)
-          .eq('user_id', userId)
-
-        if (deleteErr) throw deleteErr
+      if (snapshot.exists()) {
+        await deleteDoc(likeRef)
         return false
-      } else {
-        // Like
-        const { error: insertErr } = await supabase
-          .from('likes')
-          .insert([{ article_id: articleId, user_id: userId }])
-
-        if (insertErr) throw insertErr
-        return true
       }
+
+      await setDoc(likeRef, {
+        user_id: userId,
+        article_id: articleId,
+        created_at: serverTimestamp(),
+      })
+
+      return true
     } catch (err) {
       error.value = err.message
       console.error('Toggle like error:', err)
@@ -243,18 +272,8 @@ export const useArticlesStore = defineStore('articles', () => {
 
   const checkIfLiked = async (articleId, userId) => {
     try {
-      const { data, error: err } = await supabase
-        .from('likes')
-        .select('*')
-        .eq('article_id', articleId)
-        .eq('user_id', userId)
-        .single()
-
-      if (err && err.code !== 'PGRST116') {
-        throw err
-      }
-
-      return !!data
+      const snapshot = await getDoc(doc(db, 'articles', articleId, 'likes', userId))
+      return snapshot.exists()
     } catch (err) {
       console.error('Check like error:', err)
       return false

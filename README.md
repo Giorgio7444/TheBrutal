@@ -6,15 +6,17 @@ Piattaforma editoriale per il Post-Brutalismo digitale. Progetto d'esame — LAB
 
 ```bash
 npm install
-cp .env.example .env.local   # configura VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
+cp .env.example .env.local   # configura le variabili VITE_FIREBASE_*
 npm run dev                   # http://localhost:5173
 ```
 
-## Supabase
+## Firebase
 
-1. Crea un progetto su [supabase.com](https://supabase.com)
-2. Esegui `supabase/migrations/001_initial_schema.sql` nell'SQL Editor
-3. Configura OAuth (Google/GitHub) e crea i bucket storage: `avatars`, `article-covers`, `article-images` (pubblici)
+1. Crea un progetto su [console.firebase.google.com](https://console.firebase.google.com)
+2. Abilita Authentication (Email/Password, Google, GitHub)
+3. Crea un database Firestore in modalità produzione o test
+4. Abilita Firebase Storage e usa queste cartelle: `avatars`, `article-covers`, `article-images`
+5. Compila `.env.local` con i valori del tuo progetto Firebase
 
 ## Build
 
@@ -25,4 +27,4 @@ npm run preview   # anteprima locale
 
 ## Tech Stack
 
-Vue 3 · Pinia · Vue Router · Tiptap · Supabase · Tailwind CSS · Vite
+Vue 3 · Pinia · Vue Router · Tiptap · Firebase · Tailwind CSS · Vite

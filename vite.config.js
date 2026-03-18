@@ -12,7 +12,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
-          'supabase': ['@supabase/supabase-js'],
+          'firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
           'editor': [
             '@tiptap/vue-3',
             '@tiptap/starter-kit',
