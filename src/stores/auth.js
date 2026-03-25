@@ -177,11 +177,21 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       error.value = null
       const provider = new GithubAuthProvider()
+      provider.addScope('read:user')
+      provider.addScope('user:email')
       const data = await signInWithPopup(auth, provider)
       await ensureProfile(data.user)
       return data
     } catch (err) {
-      error.value = err.message
+      if (err.code === 'auth/operation-not-allowed') {
+        error.value = 'Provider GitHub non abilitato in Firebase Authentication.'
+      } else if (err.code === 'auth/account-exists-with-different-credential') {
+        error.value = 'Email gia associata a un altro provider. Accedi con il metodo originale e collega GitHub.'
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        error.value = 'Popup GitHub chiuso prima del completamento.'
+      } else {
+        error.value = err.message
+      }
       console.error('GitHub sign in error:', err)
       throw err
     }
