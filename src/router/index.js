@@ -73,16 +73,19 @@ const router = createRouter({
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
 
-  // Attendi che l'auth sia inizializzata (senza polling)
+  // Evita blocchi indefiniti della navigazione se auth non si inizializza.
   if (authStore.loading) {
-    await new Promise(resolve => {
-      const unwatch = authStore.$subscribe((_mutation, state) => {
-        if (!state.loading) {
-          unwatch()
-          resolve()
-        }
-      })
-    })
+    await Promise.race([
+      new Promise((resolve) => {
+        const unsubscribe = authStore.$subscribe((_mutation, state) => {
+          if (!state.loading) {
+            unsubscribe()
+            resolve()
+          }
+        })
+      }),
+      new Promise((resolve) => setTimeout(resolve, 2500)),
+    ])
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {

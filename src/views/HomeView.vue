@@ -5,9 +5,9 @@
       <div class="text-center max-w-4xl mx-auto">
         <h1
           class="text-neutral-950 dark:text-white mb-4"
-          style="font-family: 'Playfair Display', serif; font-size: clamp(3rem, 10vw, 8rem); font-weight: 700; line-height: 0.95;"
+          style="font-family: 'Host Grotesk', sans-serif; font-size: clamp(3rem, 10vw, 8rem); font-weight: 700; line-height: 0.95;"
         >
-          The Brutal
+          TheBrutal
         </h1>
         <p class="text-neutral-600 dark:text-neutral-400 text-xl md:text-2xl tracking-widest uppercase mb-12">
           Post-Brutalismo Digitale
@@ -150,7 +150,7 @@ const placeholderArticles = [
     id: 'placeholder-3',
     title: 'Anti-design: la bellezza dell\'imperfezione',
     excerpt: 'In un\'epoca di interfacce levigate e prevedibili, l\'anti-design propone una nuova forma di autenticità visiva che rompe gli schemi consolidati.',
-    cover_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=400&fit=crop',
+    cover_url: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=800&h=400&fit=crop',
     tags: ['Estetica', 'Ispirazione'],
     profiles: { username: 'giovanni_r', avatar_url: null },
     likes: [{ count: 31 }],

@@ -192,7 +192,7 @@ const placeholderArticlesData = {
     id: 'placeholder-3',
     title: 'Anti-design: la bellezza dell\'imperfezione',
     excerpt: 'In un\'epoca di interfacce levigate, l\'anti-design propone una nuova forma di autenticità visiva.',
-    cover_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&h=600&fit=crop',
+    cover_url: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=1200&h=600&fit=crop',
     tags: ['Estetica', 'Ispirazione'],
     profiles: { username: 'giovanni_r', avatar_url: null, bio: 'Critico d\'arte e curatore digitale.' },
     likes: [{ count: 31 }],

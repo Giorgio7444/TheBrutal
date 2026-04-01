@@ -103,7 +103,7 @@ const placeholderArticles = [
     id: 'placeholder-3',
     title: 'Anti-design: la bellezza dell\'imperfezione',
     excerpt: 'In un\'epoca di interfacce levigate e prevedibili, l\'anti-design propone una nuova forma di autenticità visiva che rompe gli schemi consolidati.',
-    cover_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=400&fit=crop',
+    cover_url: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=800&h=400&fit=crop',
     tags: ['Estetica', 'Ispirazione'],
     profiles: { username: 'giovanni_r', avatar_url: null },
     likes: [{ count: 31 }],
