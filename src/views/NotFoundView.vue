@@ -22,11 +22,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  document.title = '404 — The Brutal'
-})
-</script>

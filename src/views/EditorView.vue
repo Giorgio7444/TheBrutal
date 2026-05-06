@@ -220,8 +220,6 @@ const formData = ref({
 const isEditing = computed(() => !!route.params.id)
 
 onMounted(async () => {
-  document.title = isEditing.value ? 'Modifica articolo — The Brutal' : 'Nuovo articolo — The Brutal'
-  if (isEditing.value) {
     isLoading.value = true
     try {
       const article = await articlesStore.fetchArticleById(route.params.id)
@@ -270,6 +268,14 @@ const handleCoverUpload = async (event) => {
   }
   const file = event.target.files?.[0]
   if (file) {
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024
+    if (file.size > maxSize) {
+      toast.error('File troppo grande (max 5MB)')
+      if (coverInput.value) coverInput.value.value = ''
+      return
+    }
+
     try {
       const url = await articlesStore.uploadCoverImage(file)
       formData.value.cover_url = url
@@ -290,6 +296,14 @@ const handleImageUpload = async (file) => {
     toast.error(storageWarning)
     return
   }
+
+  // Validate file size (max 5MB)
+  const maxSize = 5 * 1024 * 1024
+  if (file.size > maxSize) {
+    toast.error('File troppo grande (max 5MB)')
+    return
+  }
+
   try {
     const url = await articlesStore.uploadImage(file)
     if (editorRef.value?.editor) {

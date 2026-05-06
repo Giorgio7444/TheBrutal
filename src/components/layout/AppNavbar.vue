@@ -13,7 +13,7 @@
         </router-link>
 
         <!-- Center Navigation (desktop) -->
-        <div class="hidden md:flex items-right gap-6">
+        <div class="hidden md:flex items-center gap-6">
           <router-link
             to="/articles"
             class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors"
@@ -123,17 +123,19 @@
                 <img
                   v-if="authStore.profile?.avatar_url"
                   :src="authStore.profile.avatar_url"
-                  :alt="authStore.profile.username"
+                  :alt="authStore.profile?.display_name || authStore.profile?.username || 'Utente'
+"
+                  referrerpolicy="no-referrer"
                   class="w-6 h-6 rounded-full object-cover"
                 />
                 <div
                   v-else
                   class="w-6 h-6 rounded-full bg-teal-600 flex items-center justify-center text-white text-xs font-bold"
                 >
-                  {{ (authStore.profile?.username || 'U')[0].toUpperCase() }}
+                  {{ (authStore.profile?.display_name || authStore.profile?.username || 'U')[0].toUpperCase() }}
                 </div>
                 <span class="text-sm font-medium hidden sm:block">
-                  {{ authStore.profile?.username || 'Utente' }}
+                  {{ authStore.profile?.display_name || authStore.profile?.username || 'Utente' }}
                 </span>
               </button>
               <div
@@ -224,15 +226,26 @@ onMounted(() => {
   }
   isDark.value = document.documentElement.classList.contains('dark')
   document.addEventListener('click', handleClickOutside)
+  document.addEventListener('keydown', handleKeyDown)
 })
 
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('keydown', handleKeyDown)
 })
 
 const handleClickOutside = (event) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
     isMenuOpen.value = false
+  }
+}
+
+const handleKeyDown = (event) => {
+  if (event.key === 'Escape' && isMenuOpen.value) {
+    isMenuOpen.value = false
+  }
+  if (event.key === 'Escape' && isMobileMenuOpen.value) {
+    isMobileMenuOpen.value = false
   }
 }
 

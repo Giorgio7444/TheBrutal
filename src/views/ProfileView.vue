@@ -15,7 +15,7 @@
         <div class="text-center mb-12">
           <UserAvatar
             :avatar-url="profile.avatar_url"
-            :username="profile.username"
+            :username="profile.display_name || profile.username"
             size="xl"
             class="mx-auto mb-6"
           />
@@ -50,8 +50,11 @@
 
           <div v-else>
             <h1 class="font-sans text-4xl font-bold text-neutral-950 dark:text-white mb-3">
-              {{ profile.username }}
+              {{ profile.display_name || profile.username }}
             </h1>
+            <p class="text-neutral-400 dark:text-neutral-500 text-sm mb-4">
+              @{{ profile.username }}
+            </p>
             <p class="text-neutral-600 dark:text-neutral-400 text-lg mb-6">
               {{ profile.bio || 'Nessuna biografia disponibile' }}
             </p>
@@ -112,8 +115,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
 import { useToast } from '@/composables/useToast'
-import { db } from '@/lib/firebase'
-import { collection, query, where, getDocs, limit } from 'firebase/firestore'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 import ArticleCard from '@/components/ui/ArticleCard.vue'
 
@@ -137,8 +138,6 @@ const isOwnProfile = computed(() => {
 })
 
 onMounted(async () => {
-  document.title = 'Profilo — The Brutal'
-  await loadProfile()
 })
 
 watch(() => route.params.username, async () => {
@@ -159,8 +158,7 @@ watch(() => authStore.profile, (newProfile) => {
 const loadProfile = async () => {
   try {
     loading.value = true
-    // In a real app, we'd fetch the profile by username
-    // For now, we'll use the current user's profile if viewing own profile
+    // If viewing own profile, use current user's profile
     if (isOwnProfile.value) {
       profile.value = authStore.profile
       editData.value = {
@@ -168,11 +166,8 @@ const loadProfile = async () => {
         bio: authStore.profile.bio || '',
       }
     } else {
-      const snapshot = await getDocs(
-        query(collection(db, 'profiles'), where('username', '==', route.params.username), limit(1))
-      )
-      const docSnap = snapshot.docs[0]
-      profile.value = docSnap ? { id: docSnap.id, ...docSnap.data() } : null
+      // Fetch profile by username from store
+      profile.value = await authStore.fetchProfileByUsername(route.params.username)
     }
 
     if (profile.value) {
@@ -208,10 +203,7 @@ const saveProfile = async () => {
     }
 
     if (nextUsername !== profile.value.username) {
-      const snapshot = await getDocs(
-        query(collection(db, 'profiles'), where('username', '==', nextUsername), limit(1))
-      )
-      const existing = snapshot.docs[0]
+      const existing = await authStore.fetchProfileByUsername(nextUsername)
       if (existing && existing.id !== profile.value.id) {
         toast.error('Nome utente gia in uso')
         return

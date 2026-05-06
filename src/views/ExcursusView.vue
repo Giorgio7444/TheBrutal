@@ -99,11 +99,3 @@
     </div>
   </main>
 </template>
-
-<script setup>
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  document.title = 'Excursus — The Brutal'
-})
-</script>

@@ -1,7 +1,7 @@
 <template>
-  <div
-    @click="router.push(`/article/${article.id}`)"
-    class="group block overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+  <router-link
+    :to="`/article/${article.id}`"
+    class="group flex flex-col overflow-hidden rounded-none border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 no-underline text-inherit"
   >
     <!-- Cover Image -->
     <div v-if="article.cover_url" class="relative h-48 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
@@ -14,7 +14,7 @@
     <div v-else class="h-48 bg-gradient-to-br from-teal-100 to-teal-50 dark:from-teal-950 dark:to-neutral-950" />
 
     <!-- Content -->
-    <div class="p-5">
+    <div class="p-5 flex flex-col flex-1">
       <!-- Tags -->
       <div v-if="article.tags && article.tags.length > 0" class="flex flex-wrap gap-2 mb-3">
         <TagBadge
@@ -35,7 +35,7 @@
       </p>
 
       <!-- Excerpt -->
-      <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4 line-clamp-2">
+      <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4 line-clamp-2 flex-1">
         {{ article.excerpt || 'Nessuna descrizione disponibile' }}
       </p>
 
@@ -44,13 +44,13 @@
         <!-- Author -->
         <div class="flex items-center gap-2">
           <UserAvatar
-            :avatar-url="article.profiles?.avatar_url"
-            :username="article.profiles?.username"
+            :avatar-url="authorAvatarUrl"
+            :username="authorName"
             size="sm"
           />
           <div>
             <p class="text-xs font-medium text-neutral-950 dark:text-white">
-              {{ article.profiles?.username || 'Anonimo' }}
+              {{ authorName || 'Anonimo' }}
             </p>
             <p class="text-xs text-neutral-500 dark:text-neutral-500">
               {{ formatDate(article.created_at) }}
@@ -67,23 +67,29 @@
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import UserAvatar from './UserAvatar.vue'
 import TagBadge from './TagBadge.vue'
 import { formatDate } from '@/lib/utils'
-
-const router = useRouter()
 
 const props = defineProps({
   article: {
     type: Object,
     required: true,
   },
+})
+
+const authStore = useAuthStore()
+
+const authorName = computed(() => props.article.profiles?.display_name || props.article.profiles?.username)
+
+const authorAvatarUrl = computed(() => {
+  return props.article.profiles?.avatar_url || null
 })
 
 const likeCount = computed(() => {

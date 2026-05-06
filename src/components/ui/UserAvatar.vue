@@ -3,6 +3,7 @@
     v-if="avatarUrl"
     :src="avatarUrl"
     :alt="username"
+    referrerpolicy="no-referrer"
     class="rounded-full object-cover"
     :class="sizeClasses"
   />

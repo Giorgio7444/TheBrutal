@@ -1,24 +1,20 @@
-import { ref } from 'vue'
+import { useUIStore } from '@/stores/ui'
 
-const toasts = ref([])
-let nextId = 0
-
+/**
+ * Composable for managing toast notifications.
+ * Provides a convenient wrapper around useUIStore for toast functionality.
+ */
 export const useToast = () => {
-  const addToast = (message, type = 'info', duration = 4000) => {
-    const id = nextId++
-    toasts.value.push({ id, message, type })
-    if (duration > 0) {
-      setTimeout(() => removeToast(id), duration)
-    }
+  const uiStore = useUIStore()
+
+  return {
+    toasts: uiStore.toasts,
+    addToast: uiStore.addToast,
+    removeToast: uiStore.removeToast,
+    success: uiStore.success,
+    error: uiStore.error,
+    info: uiStore.info,
+    warning: uiStore.warning,
   }
-
-  const removeToast = (id) => {
-    toasts.value = toasts.value.filter(t => t.id !== id)
-  }
-
-  const success = (message) => addToast(message, 'success')
-  const error = (message) => addToast(message, 'error')
-  const info = (message) => addToast(message, 'info')
-
-  return { toasts, addToast, removeToast, success, error, info }
 }
+

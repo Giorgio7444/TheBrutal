@@ -149,10 +149,6 @@ const route = useRoute()
 const email = ref('')
 const password = ref('')
 
-onMounted(() => {
-  document.title = 'Accedi — The Brutal'
-})
-
 const signInWithGoogle = async () => {
   try {
     await authStore.signInWithGoogle()

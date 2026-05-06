@@ -57,8 +57,4 @@ const categories = [
 const goToCategory = (slug) => {
   router.push(`/articles?tag=${slug}`)
 }
-
-onMounted(() => {
-  document.title = 'Categorie — The Brutal'
-})
 </script>

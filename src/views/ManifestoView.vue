@@ -132,11 +132,3 @@
     </div>
   </main>
 </template>
-
-<script setup>
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  document.title = 'Manifesto — The Brutal'
-})
-</script>

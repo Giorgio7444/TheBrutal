@@ -29,7 +29,7 @@ export const useArticlesStore = defineStore('articles', () => {
   const pageSize = 12
   const pageCursors = ref([])
   const lastQueryKey = ref('')
-  const profileCache = new Map()
+  const profileCache = ref({})
 
   const buildQueryKey = (tags) => tags.slice().sort().join('|')
 
@@ -41,13 +41,13 @@ export const useArticlesStore = defineStore('articles', () => {
 
   const fetchProfileById = async (userId) => {
     if (!userId) return null
-    if (profileCache.has(userId)) return profileCache.get(userId)
+    if (profileCache.value[userId]) return profileCache.value[userId]
 
     const snapshot = await getDoc(doc(db, 'profiles', userId))
     if (!snapshot.exists()) return null
 
     const data = { id: snapshot.id, ...snapshot.data() }
-    profileCache.set(userId, data)
+    profileCache.value[userId] = data
     return data
   }
 

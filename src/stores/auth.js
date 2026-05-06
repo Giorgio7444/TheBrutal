@@ -57,23 +57,63 @@ export const useAuthStore = defineStore('auth', () => {
     return `${base}_${firebaseUser.uid.slice(0, 6)}`
   }
 
+  const isGoogleAvatarUrl = (url) => {
+    return typeof url === 'string' && /googleusercontent\.com|google\.com/.test(url)
+  }
+
+  const cacheRemoteAvatar = async (url, userId) => {
+    if (!url || !isStorageEnabled || !storage) return url
+    if (!isGoogleAvatarUrl(url)) return url
+
+    try {
+      const response = await fetch(url)
+      if (!response.ok) throw new Error(`Avatar fetch failed with status ${response.status}`)
+
+      const blob = await response.blob()
+      const mimeType = blob.type || 'image/jpeg'
+      const extension = mimeType.includes('/') ? mimeType.split('/')[1] : 'jpg'
+      const avatarRef = storageRef(storage, `avatars/google-${userId}-${Date.now()}.${extension}`)
+
+      await uploadBytes(avatarRef, blob, { contentType: mimeType })
+      return await getDownloadURL(avatarRef)
+    } catch (err) {
+      console.warn('[Auth] Could not cache remote avatar:', err)
+      return null
+    }
+  }
+
   const ensureProfile = async (firebaseUser) => {
     const profileRef = doc(db, 'profiles', firebaseUser.uid)
     const snapshot = await getDoc(profileRef)
+    const displayName = firebaseUser.displayName || null
+    const photoURL = firebaseUser.photoURL || null
 
     if (snapshot.exists()) {
       profile.value = { id: snapshot.id, ...snapshot.data() }
+
+      if (displayName && profile.value.display_name !== displayName) {
+        await updateDoc(profileRef, { display_name: displayName })
+        profile.value = { ...profile.value, display_name: displayName }
+      }
+
+      const cachedAvatarUrl = await cacheRemoteAvatar(photoURL, firebaseUser.uid)
+      if (cachedAvatarUrl && profile.value.avatar_url !== cachedAvatarUrl) {
+        await updateDoc(profileRef, { avatar_url: cachedAvatarUrl })
+        profile.value = { ...profile.value, avatar_url: cachedAvatarUrl }
+      }
+
       return
     }
 
     const username = await generateUniqueUsername(firebaseUser)
     const nowIso = new Date().toISOString()
+    const cachedAvatarUrl = await cacheRemoteAvatar(photoURL, firebaseUser.uid)
     const data = {
       id: firebaseUser.uid,
       username,
-      display_name: firebaseUser.displayName || null,
+      display_name: displayName,
       bio: null,
-      avatar_url: firebaseUser.photoURL || null,
+      avatar_url: cachedAvatarUrl,
       created_at: serverTimestamp(),
     }
 
@@ -137,12 +177,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const fetchProfile = async (userId) => {
+  const fetchProfileByUsername = async (username) => {
+    try {
+      const snapshot = await getDocs(
+        query(collection(db, 'profiles'), where('username', '==', username), limit(1))
+      )
+      const docSnap = snapshot.docs[0]
+      return docSnap ? { id: docSnap.id, ...docSnap.data() } : null
+    } catch (err) {
+      console.error('Fetch profile by username error:', err)
+      throw err
+    }
+  }
+
+  const fetchProfileById = async (userId) => {
     try {
       const snapshot = await getDoc(doc(db, 'profiles', userId))
-      profile.value = snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null
+      return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null
     } catch (err) {
-      console.error('Fetch profile error:', err)
+      console.error('Fetch profile by ID error:', err)
+      throw err
     }
   }
 
@@ -274,7 +328,8 @@ export const useAuthStore = defineStore('auth', () => {
     error,
     isAuthenticated,
     initializeAuth,
-    fetchProfile,
+    fetchProfileByUsername,
+    fetchProfileById,
     signInWithEmail,
     signInWithGoogle,
     signInWithGithub,

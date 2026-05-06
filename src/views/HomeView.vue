@@ -119,48 +119,12 @@
 import { ref, onMounted } from 'vue'
 import { useArticlesStore } from '@/stores/articles'
 import ArticleCard from '@/components/ui/ArticleCard.vue'
+import { placeholderArticles } from '@/data/placeholders'
 
 const articlesStore = useArticlesStore()
 const featuredArticles = ref([])
 
-const placeholderArticles = [
-  {
-    id: 'placeholder-1',
-    title: 'Il Brutalismo Digitale: origini e significato',
-    excerpt: 'Come il brutalismo architettonico ha ispirato un movimento estetico nel web design contemporaneo, sfidando le convenzioni del design pulito e minimalista.',
-    cover_url: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=400&fit=crop',
-    tags: ['Estetica', 'Teoria e Tecnica'],
-    profiles: { username: 'marco_b', avatar_url: null },
-    likes: [{ count: 24 }],
-    created_at: '2026-02-15T10:30:00Z',
-    published: true,
-  },
-  {
-    id: 'placeholder-2',
-    title: 'Tipografia raw: quando il carattere diventa struttura',
-    excerpt: 'Un\'esplorazione dell\'uso tipografico nel design brutalista, dove il testo non è solo contenuto ma diventa elemento architettonico della pagina.',
-    cover_url: 'https://images.unsplash.com/photo-1448932223592-d1fc686e76ea?w=800&h=400&fit=crop',
-    tags: ['Tipografia', 'Composizione'],
-    profiles: { username: 'lucia_design', avatar_url: null },
-    likes: [{ count: 18 }],
-    created_at: '2026-02-10T14:00:00Z',
-    published: true,
-  },
-  {
-    id: 'placeholder-3',
-    title: 'Anti-design: la bellezza dell\'imperfezione',
-    excerpt: 'In un\'epoca di interfacce levigate e prevedibili, l\'anti-design propone una nuova forma di autenticità visiva che rompe gli schemi consolidati.',
-    cover_url: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=800&h=400&fit=crop',
-    tags: ['Estetica', 'Ispirazione'],
-    profiles: { username: 'giovanni_r', avatar_url: null },
-    likes: [{ count: 31 }],
-    created_at: '2026-01-28T09:15:00Z',
-    published: true,
-  },
-]
-
 onMounted(async () => {
-  document.title = 'The Brutal — Post Brutalismo Digitale'
   try {
     const data = await articlesStore.fetchPublishedArticles([], 0)
     featuredArticles.value = data && data.length > 0 ? data.slice(0, 3) : placeholderArticles
