@@ -86,6 +86,15 @@ export const useAuthStore = defineStore('auth', () => {
       loading.value = true
       let initialized = false
 
+      // Timeout di 5 secondi per evitare blocchi indefiniti
+      const timeoutId = setTimeout(() => {
+        if (!initialized) {
+          loading.value = false
+          initialized = true
+          console.warn('[Auth] Initialization timeout after 5 seconds')
+        }
+      }, 5000)
+
       const unsubscribe = onAuthStateChanged(
         auth,
         async (firebaseUser) => {
@@ -103,6 +112,7 @@ export const useAuthStore = defineStore('auth', () => {
           }
 
           if (!initialized) {
+            clearTimeout(timeoutId)
             loading.value = false
             initialized = true
           }
@@ -111,6 +121,7 @@ export const useAuthStore = defineStore('auth', () => {
           console.error('Auth init error:', err)
           error.value = err.message
           if (!initialized) {
+            clearTimeout(timeoutId)
             loading.value = false
             initialized = true
           }
