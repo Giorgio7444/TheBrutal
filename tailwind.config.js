@@ -4,28 +4,18 @@ export default {
     './index.html',
     './src/**/*.{vue,js}',
   ],
-  darkMode: 'class',
+  darkMode: false,
   theme: {
     extend: {
       colors: {
-        neutral: {
-          50: '#F8F6F1',
-          100: '#F0EEEA',
-          200: '#E0DDD8',
-          300: '#D0CCC6',
-          400: '#B8B3AA',
-          500: '#A09892',
-          600: '#888077',
-          700: '#706860',
-          800: '#5A524E',
-          900: '#464140',
-          950: '#1A1A1A',
-        },
+        primary: '#f1f1f1',
+        secondary: '#000000',
+        tertiary: '#0ADD08',
       },
       fontFamily: {
-        'sans': ['DM Sans', 'sans-serif'],
+        'sans': ['Suisse Int\'l', 'sans-serif'],
+        'mono': ['Suisse Int\'l Mono', 'monospace'],
       },
-
     },
   },
   plugins: [

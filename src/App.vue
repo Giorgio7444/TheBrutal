@@ -5,7 +5,7 @@ import ToastNotification from '@/components/ui/ToastNotification.vue'
 </script>
 
 <template>
-  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-950 dark:text-neutral-50 transition-colors">
+  <div class="min-h-screen bg-primary text-secondary">
     <AppNavbar />
     
     <main class="pt-16">
@@ -29,12 +29,6 @@ import ToastNotification from '@/components/ui/ToastNotification.vue'
 </template>
 
 <style>
-/* Font già caricati in index.html — nessun @import duplicato */
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
