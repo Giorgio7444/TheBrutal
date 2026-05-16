@@ -13,10 +13,7 @@
       <p class="text-neutral-400 dark:text-neutral-600 text-sm mb-8">
         Il brutalismo non decora l'assenza. La dichiara.
       </p>
-      <router-link
-        to="/"
-        class="inline-block px-8 py-4 border-2 border-neutral-950 dark:border-white text-neutral-950 dark:text-white hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-neutral-950 transition-colors text-sm font-medium uppercase tracking-widest"
-      >
+      <router-link to="/" class="inline-block px-8 py-4 border-2 border-neutral-950 dark:border-white text-neutral-950 dark:text-white hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-neutral-950 transition-colors text-sm font-medium uppercase tracking-widest">
         Torna alla home
       </router-link>
     </div>

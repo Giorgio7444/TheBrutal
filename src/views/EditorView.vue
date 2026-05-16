@@ -16,10 +16,7 @@
             {{ publishedArticle.title }}
           </p>
           <div class="flex flex-col gap-3">
-            <router-link
-              :to="`/article/${publishedArticle.id}`"
-              class="px-6 py-3 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition-colors font-medium"
-            >
+            <router-link :to="`/article/${publishedArticle.id}`" class="px-6 py-3 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition-colors font-medium">
               Visualizza articolo
             </router-link>
             <button
@@ -242,7 +239,6 @@ onMounted(async () => {
     } finally {
       isLoading.value = false
     }
-  }
 })
 
 watch(() => tagsInput.value, (newVal) => {

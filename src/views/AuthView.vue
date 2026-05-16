@@ -9,7 +9,7 @@
           </div>
         </div>
         <h1 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-2">
-          The Brutalist
+          Italian Spotlight
         </h1>
         <p class="text-neutral-600 dark:text-neutral-400">
           Accedi per iniziare a scrivere e condividere i tuoi articoli

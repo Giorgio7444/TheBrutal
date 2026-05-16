@@ -33,10 +33,7 @@
               size="md"
             />
             <div>
-              <router-link
-                :to="`/profile/${article.profiles?.username}`"
-                class="font-sans text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
-              >
+              <router-link :to="`/profile/${article.profiles?.username}`" class="font-sans text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
                 {{ authorName }}
               </router-link>
               <p class="text-sm text-neutral-600 dark:text-neutral-400">
@@ -113,10 +110,7 @@
               size="lg"
             />
             <div class="flex-1">
-              <router-link
-                :to="`/profile/${article.profiles?.username}`"
-                class="font-sans text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
-              >
+              <router-link :to="`/profile/${article.profiles?.username}`" class="font-sans text-2xl font-bold text-neutral-950 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
                 {{ authorName }}
               </router-link>
               <p class="text-neutral-600 dark:text-neutral-400 mt-2">
@@ -134,10 +128,7 @@
         <h2 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-4">
           Articolo non trovato
         </h2>
-        <router-link
-          to="/"
-          class="px-4 py-2 rounded-lg bg-teal-600 dark:bg-teal-600 text-white hover:bg-teal-700 dark:hover:bg-teal-700 transition-colors inline-block"
-        >
+        <router-link to="/" class="px-4 py-2 rounded-lg bg-teal-600 dark:bg-teal-600 text-white hover:bg-teal-700 dark:hover:bg-teal-700 transition-colors inline-block">
           Torna alla home
         </router-link>
       </div>
@@ -196,9 +187,9 @@ const loadArticle = async () => {
     isPlaceholder.value = true
     article.value = placeholderArticlesData[articleId]
     likeCount.value = article.value.likes?.[0]?.count || 0
-    document.title = `${article.value.title} — The Brutal`
+    document.title = `${article.value.title} — Italian Spotlight`
     metaTags.setMetaTags({
-      title: `${article.value.title} — The Brutal`,
+      title: `${article.value.title} — Italian Spotlight`,
       description: article.value.excerpt,
       image: article.value.cover_url,
       url: `https://the-brutal.web.app/article/${articleId}`,
@@ -213,9 +204,9 @@ const loadArticle = async () => {
     const data = await articlesStore.fetchArticleById(articleId)
     article.value = data
     likeCount.value = data.likes?.[0]?.count || 0
-    document.title = `${data.title} — The Brutal`
+    document.title = `${data.title} — Italian Spotlight`
     metaTags.setMetaTags({
-      title: `${data.title} — The Brutal`,
+      title: `${data.title} — Italian Spotlight`,
       description: data.excerpt,
       image: data.cover_url,
       url: `https://the-brutal.web.app/article/${articleId}`,

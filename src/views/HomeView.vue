@@ -1,38 +1,31 @@
 <template>
-  <div class="min-h-screen bg-primary text-secondary flex items-center justify-center px-4">
-    <div class="bottonihome flex flex-wrap gap-8 justify-center max-w-6xl">
+  <div class="relative min-h-screen overflow-hidden bg-black flex items-center justify-center opacity-100">
+      <div class="absolute h-[90svh] top-[-1px] opacity-100">
+        <img :src="bgGif" class="h-full w-auto max-w-none object-contain object-center">
+      </div>
+    
+
+    <div class="bottonihome absolute top-[90vh] flex justify-between gap-x-[5px] w-[50vw]">
       <router-link
-        to="/articles"
-        class="bg-primary border border-secondary/20 px-8 py-4 inline-flex items-center gap-4 hover:opacity-80 transition-opacity"
-      >
-        <div class="w-4 h-4 rounded-full bg-tertiary flex-shrink-0"></div>
-        <h3>Esplora</h3>
-      </router-link>
-      <router-link
-        to="/auth"
-        class="bg-primary border border-secondary/20 px-8 py-4 inline-flex items-center gap-4 hover:opacity-80 transition-opacity"
-      >
-        <div class="w-4 h-4 rounded-full bg-tertiary flex-shrink-0"></div>
-        <h3>Iscrizioni</h3>
-      </router-link>
-      <router-link
-        to="/manifesto"
-        class="bg-primary border border-secondary/20 px-8 py-4 inline-flex items-center gap-4 hover:opacity-80 transition-opacity"
-      >
-        <div class="w-4 h-4 rounded-full bg-tertiary flex-shrink-0"></div>
-        <h3>Manifesto</h3>
-      </router-link>
-      <router-link
-        to="/profile"
-        class="bg-primary border border-secondary/20 px-8 py-4 inline-flex items-center gap-4 hover:opacity-80 transition-opacity"
-      >
-        <div class="w-4 h-4 rounded-full bg-tertiary flex-shrink-0"></div>
-        <h3>Profilo</h3>
+        v-for="link in homeLinks"
+        :key="link.to"
+        :to="link.to"
+        class="flex items-center justify-center whitespace-nowrap text-white hover:text-tertiary transition-colors">
+        <div class="rounded-full bg-tertiary flex-shrink-0"></div>
+        <div class="text-[2vw] font-bold"> {{ link.label }} </div>
       </router-link>
     </div>
   </div>
 </template>
 
 <script setup>
-// Home completamente vuota con solo 4 pulsanti
+import logoSvg from '../../assets/logo.svg'
+import bgGif from '../../assets/bg.gif'
+
+const homeLinks = [
+  { to: '/articles', label: 'Esplora' },
+  { to: '/auth', label: 'Iscrizioni' },
+  { to: '/manifesto', label: 'Manifesto' },
+  { to: '/profile', label: 'Profilo' },
+]
 </script>

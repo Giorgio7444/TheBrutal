@@ -6,67 +6,67 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('@/views/HomeView.vue'),
-    meta: { title: 'The Brutal — Post Brutalismo Digitale' },
+    meta: { title: 'Italian Spotlight — Post Brutalismo Digitale' },
   },
   {
     path: '/articles',
     name: 'Articles',
     component: () => import('@/views/ArticlesView.vue'),
-    meta: { title: 'Articoli — The Brutal' },
+    meta: { title: 'Articoli — Italian Spotlight' },
   },
   {
     path: '/categories',
     name: 'Categories',
     component: () => import('@/views/CategoriesView.vue'),
-    meta: { title: 'Categorie — The Brutal' },
+    meta: { title: 'Categorie — Italian Spotlight' },
   },
   {
     path: '/article/:id',
     name: 'Article',
     component: () => import('@/views/ArticleView.vue'),
-    meta: { title: 'Articolo — The Brutal' },
+    meta: { title: 'Articolo — Italian Spotlight' },
   },
   {
     path: '/editor',
     name: 'Editor',
     component: () => import('@/views/EditorView.vue'),
-    meta: { requiresAuth: true, title: 'Scrivi un articolo — The Brutal' },
+    meta: { requiresAuth: true, requiresAdmin: true, title: 'Scrivi un articolo — Italian Spotlight' },
   },
   {
     path: '/editor/:id',
     name: 'EditArticle',
     component: () => import('@/views/EditorView.vue'),
-    meta: { requiresAuth: true, title: 'Modifica articolo — The Brutal' },
+    meta: { requiresAuth: true, requiresAdmin: true, title: 'Modifica articolo — Italian Spotlight' },
   },
   {
     path: '/profile/:username',
     name: 'Profile',
     component: () => import('@/views/ProfileView.vue'),
-    meta: { title: 'Profilo — The Brutal' },
+    meta: { title: 'Profilo — Italian Spotlight' },
   },
   {
     path: '/auth',
     name: 'Auth',
     component: () => import('@/views/AuthView.vue'),
-    meta: { title: 'Accedi — The Brutal' },
+    meta: { title: 'Accedi — Italian Spotlight' },
   },
   {
     path: '/manifesto',
     name: 'Manifesto',
     component: () => import('@/views/ManifestoView.vue'),
-    meta: { title: 'Manifesto — The Brutal' },
+    meta: { title: 'Manifesto — Italian Spotlight' },
   },
   {
     path: '/excursus',
     name: 'Excursus',
     component: () => import('@/views/ExcursusView.vue'),
-    meta: { title: 'Excursus — The Brutal' },
+    meta: { title: 'Excursus — Italian Spotlight' },
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFoundView.vue'),
-    meta: { title: '404 — The Brutal' },
+    meta: { title: '404 — Italian Spotlight' },
   },
 ]
 
@@ -99,6 +99,8 @@ router.beforeEach(async (to, _from, next) => {
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'Auth', query: { redirect: to.fullPath, reason: 'login_required' } })
+  } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    next({ name: 'Home' })
   } else if (to.name === 'Auth' && authStore.isAuthenticated) {
     next({ name: 'Home' })
   } else {

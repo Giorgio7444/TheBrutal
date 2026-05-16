@@ -5,7 +5,7 @@
       <div class="mx-auto max-w-7xl">
         <div class="text-center mb-12">
           <h1 class="font-sans text-5xl md:text-6xl font-bold text-neutral-950 dark:text-white mb-4">
-            The Brutal List
+            Italian Spotlight List
           </h1>
           <p class="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
             Un luogo in cui potrai scoprire un nuovo punto di vista, quello dei Post Brutalisti. Gli articoli presenti in questa sezione hanno l'obiettivo di incentivare, esplorare ed espandere la causa Post Brutalista.

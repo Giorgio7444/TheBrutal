@@ -98,10 +98,7 @@
         <h2 class="font-sans text-3xl font-bold text-neutral-950 dark:text-white mb-4">
           Profilo non trovato
         </h2>
-        <router-link
-          to="/"
-          class="px-4 py-2 rounded-lg bg-teal-600 dark:bg-teal-600 text-white hover:bg-teal-700 dark:hover:bg-teal-700 transition-colors inline-block"
-        >
+        <router-link to="/" class="px-4 py-2 rounded-lg bg-teal-600 dark:bg-teal-600 text-white hover:bg-teal-700 dark:hover:bg-teal-700 transition-colors inline-block">
           Torna alla home
         </router-link>
       </div>

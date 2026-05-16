@@ -5,7 +5,7 @@
 export const useMetaTags = () => {
   const setMetaTags = (config) => {
     const {
-      title = 'The Brutal — Post Brutalismo Digitale',
+      title = 'Italian Spotlight — Post Brutalismo Digitale',
       description = 'La piattaforma editoriale dedicata al Post Brutalismo Digitale.',
       image = 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&h=630&fit=crop',
       url = 'https://the-brutal.web.app',

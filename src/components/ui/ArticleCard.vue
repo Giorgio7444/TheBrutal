@@ -1,8 +1,5 @@
 <template>
-  <router-link
-    :to="`/article/${article.id}`"
-    class="group flex flex-col overflow-hidden rounded-none border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 no-underline text-inherit"
-  >
+  <router-link :to="`/article/${article.id}`" class="group flex flex-col overflow-hidden rounded-none border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 no-underline text-inherit">
     <!-- Cover Image -->
     <div v-if="article.cover_url" class="relative h-48 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
       <img

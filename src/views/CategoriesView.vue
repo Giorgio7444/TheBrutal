@@ -50,7 +50,7 @@ const categories = [
   { name: 'Video d\'ispirazione', slug: 'video-ispirazione', description: 'Documentari, interviste e video-saggi che esplorano l\'estetica brutalista nel digitale e nell\'architettura.', count: 8 },
   { name: 'Articoli esterni interessanti', slug: 'articoli-esterni', description: 'Letture selezionate dalla redazione: saggi critici, analisi di design e riflessioni sul rapporto tra forma e funzione.', count: 15 },
   { name: 'Bibliografia consigliata', slug: 'bibliografia', description: 'Testi fondamentali sul brutalismo, dal "New Brutalism" di Banham alle teorie contemporanee del web design radicale.', count: 6 },
-  { name: 'Gli articoli fondamentali', slug: 'articoli-fondamentali', description: 'La selezione essenziale della piattaforma: i contributi che definiscono la visione Post-Brutalista di The Brutal.', count: 12 },
+  { name: 'Gli articoli fondamentali', slug: 'articoli-fondamentali', description: 'La selezione essenziale della piattaforma: i contributi che definiscono la visione Post-Brutalista di Italian Spotlight.', count: 12 },
   { name: 'Newsletter', slug: 'newsletter', description: 'Archivio completo delle newsletter: aggiornamenti, nuove pubblicazioni e approfondimenti dalla community.', count: 23 },
 ]
 

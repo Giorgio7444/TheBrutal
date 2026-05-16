@@ -31,6 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref(null)
 
   const isAuthenticated = computed(() => !!user.value)
+  const isAdmin = computed(() => profile.value?.admin === true)
 
   const normalizeUsernameBase = (value) => {
     const base = (value || '')
@@ -327,6 +328,7 @@ export const useAuthStore = defineStore('auth', () => {
     loading,
     error,
     isAuthenticated,
+    isAdmin,
     initializeAuth,
     fetchProfileByUsername,
     fetchProfileById,
