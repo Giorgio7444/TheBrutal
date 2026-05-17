@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    font-family: 'Suisse Int\'l Mono', monospace;
+    font-family: "Suisse Int'l Mono", monospace;
     background-color: #000000;
     color: #f1f1f1;
     -webkit-font-smoothing: antialiased;
@@ -12,26 +12,26 @@
   }
 
   h1 {
-    font-family: 'Suisse Int\'l Mono', monospace;
+    font-family: "Suisse Int'l Mono", monospace;
     font-weight: 700;
     font-size: 80px;
     line-height: 2;
   }
 
   h2 {
-    font-family: 'Suisse Int\'l Mono', monospace;
+    font-family: "Suisse Int'l Mono", monospace;
     font-weight: 500;
     font-size: 48px;
   }
 
   h3 {
-    font-family: 'Suisse Int\'l Mono', monospace;
+    font-family: "Suisse Int'l Mono", monospace;
     font-weight: 700;
     font-size: 24px;
   }
 
   p {
-    font-family: 'Suisse Int\'l Mono', monospace;
+    font-family: "Suisse Int'l Mono", monospace;
     font-size: 11px;
   }
 }

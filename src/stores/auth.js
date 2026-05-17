@@ -207,7 +207,7 @@ export const useAuthStore = defineStore('auth', () => {
       const data = await signInWithEmailAndPassword(auth, email, password)
       return { data, error: null }
     } catch (err) {
-      if (err.code === 'auth/user-not-found') {
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
         try {
           const signUpData = await createUserWithEmailAndPassword(auth, email, password)
           await ensureProfile(signUpData.user)

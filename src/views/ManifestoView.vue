@@ -1,21 +1,21 @@
 <template>
-  <main class="min-h-screen bg-neutral-50 dark:bg-neutral-950 pt-24 pb-16">
+  <main class="min-h-screen bg-primary pt-24 pb-16">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
       <h1
-        class="text-neutral-950 dark:text-white mb-4"
+        class="text-secondary mb-4"
         style="font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700;"
       >
         Manifesto
       </h1>
-      <p class="text-neutral-600 dark:text-neutral-400 text-lg mb-12 border-b border-neutral-200 dark:border-neutral-800 pb-8">
+      <p class="text-secondary/70 text-lg mb-12 border-b border-secondary/20 pb-8">
         Cinque principi per un Post-Brutalismo digitale consapevole.
       </p>
 
-      <div class="prose dark:prose-invert prose-neutral max-w-none space-y-12">
+      <div class="prose max-w-none space-y-12">
         <!-- Punto I -->
         <section>
           <h2 class="flex items-baseline gap-4">
-            <span class="text-teal-600 dark:text-teal-400 font-mono text-sm">I.</span>
+            <span class="text-tertiary font-mono text-sm">I.</span>
             Onestà del medium digitale
           </h2>
           <p>
@@ -36,7 +36,7 @@
         <!-- Punto II -->
         <section>
           <h2 class="flex items-baseline gap-4">
-            <span class="text-teal-600 dark:text-teal-400 font-mono text-sm">II.</span>
+            <span class="text-tertiary font-mono text-sm">II.</span>
             Rifiuto dell'ornamento superfluo
           </h2>
           <p>
@@ -58,7 +58,7 @@
         <!-- Punto III -->
         <section>
           <h2 class="flex items-baseline gap-4">
-            <span class="text-teal-600 dark:text-teal-400 font-mono text-sm">III.</span>
+            <span class="text-tertiary font-mono text-sm">III.</span>
             La struttura come estetica
           </h2>
           <p>
@@ -80,7 +80,7 @@
         <!-- Punto IV -->
         <section>
           <h2 class="flex items-baseline gap-4">
-            <span class="text-teal-600 dark:text-teal-400 font-mono text-sm">IV.</span>
+            <span class="text-tertiary font-mono text-sm">IV.</span>
             Accessibilità come valore
           </h2>
           <p>
@@ -103,7 +103,7 @@
         <!-- Punto V -->
         <section>
           <h2 class="flex items-baseline gap-4">
-            <span class="text-teal-600 dark:text-teal-400 font-mono text-sm">V.</span>
+            <span class="text-tertiary font-mono text-sm">V.</span>
             L'imperfezione come autenticità
           </h2>
           <p>
@@ -123,9 +123,9 @@
           </p>
         </section>
 
-        <hr class="border-neutral-200 dark:border-neutral-800" />
+        <hr class="border-secondary/20" />
 
-        <p class="text-center text-neutral-500 dark:text-neutral-500 italic text-sm">
+        <p class="text-center text-secondary/60 italic text-sm">
           Questo manifesto è un documento vivo. Evolve con la pratica, con il confronto, con l'errore.
         </p>
       </div>

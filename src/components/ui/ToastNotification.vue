@@ -5,8 +5,9 @@
         <div
           v-for="toast in toasts"
           :key="toast.id"
+          @click="removeToast(toast.id)"
           :class="[
-            'flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium',
+            'flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm font-medium cursor-pointer',
             typeClasses[toast.type],
           ]"
         >
@@ -24,8 +25,9 @@
           </svg>
           <span class="flex-1">{{ toast.message }}</span>
           <button
-            @click="removeToast(toast.id)"
-            class="shrink-0 hover:opacity-70 transition-opacity"
+            type="button"
+            @click.stop.prevent="removeToast(toast.id)"
+            class="shrink-0 hover:opacity-70 transition-opacity cursor-pointer"
             aria-label="Chiudi notifica"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -44,10 +46,10 @@ import { useToast } from '@/composables/useToast'
 const { toasts, removeToast } = useToast()
 
 const typeClasses = {
-  success: 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300',
-  error: 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300',
-  info: 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300',
-  warning: 'bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300',
+  success: 'bg-tertiary/20 border-tertiary/40 text-secondary',
+  error: 'bg-red-100 border-red-300 text-red-800',
+  info: 'bg-secondary/10 border-secondary/20 text-secondary',
+  warning: 'bg-yellow-100 border-yellow-300 text-yellow-800',
 }
 </script>
 

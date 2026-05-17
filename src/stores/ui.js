@@ -14,7 +14,10 @@ export const useUIStore = defineStore('ui', () => {
   }
 
   const removeToast = (id) => {
-    toasts.value = toasts.value.filter((t) => t.id !== id)
+    const index = toasts.value.findIndex((t) => t.id === id)
+    if (index !== -1) {
+      toasts.value.splice(index, 1)
+    }
   }
 
   const success = (message) => addToast(message, 'success')

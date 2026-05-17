@@ -9,7 +9,7 @@
   />
   <div
     v-else
-    :class="[sizeClasses, 'rounded-full bg-teal-600 dark:bg-teal-600 flex items-center justify-center text-white font-bold']"
+    :class="[sizeClasses, 'rounded-full bg-tertiary flex items-center justify-center text-secondary font-bold']"
   >
     {{ (username || 'U')[0].toUpperCase() }}
   </div>

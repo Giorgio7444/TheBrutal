@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { auth, db } from '@/lib/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
 const routes = [
   {
@@ -9,10 +11,14 @@ const routes = [
     meta: { title: 'Italian Spotlight — Post Brutalismo Digitale' },
   },
   {
+    path: '/designers',
+    name: 'Designers',
+    component: () => import('@/views/DesignersView.vue'),
+    meta: { title: 'Designers — Italian Spotlight' },
+  },
+  {
     path: '/articles',
-    name: 'Articles',
-    component: () => import('@/views/ArticlesView.vue'),
-    meta: { title: 'Articoli — Italian Spotlight' },
+    redirect: '/designers',
   },
   {
     path: '/categories',
@@ -21,10 +27,14 @@ const routes = [
     meta: { title: 'Categorie — Italian Spotlight' },
   },
   {
+    path: '/details/:id',
+    name: 'Details',
+    component: () => import('@/views/DetailView.vue'),
+    meta: { title: 'Details — Italian Spotlight' },
+  },
+  {
     path: '/article/:id',
-    name: 'Article',
-    component: () => import('@/views/ArticleView.vue'),
-    meta: { title: 'Articolo — Italian Spotlight' },
+    redirect: (to) => ({ path: `/details/${to.params.id}`, query: to.query, hash: to.hash }),
   },
   {
     path: '/editor',
@@ -39,13 +49,32 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true, title: 'Modifica articolo — Italian Spotlight' },
   },
   {
+    path: '/admin/posts',
+    name: 'AdminPosts',
+    component: () => import('@/views/admin/PostList.vue'),
+    meta: { requiresAdmin: true, title: 'Post admin — Italian Spotlight' },
+  },
+  {
+    path: '/admin/edit-post/:id',
+    name: 'AdminEditPost',
+    component: () => import('@/views/admin/EditPost.vue'),
+    meta: { requiresAdmin: true, title: 'Modifica post — Italian Spotlight' },
+  },
+  {
+    path: '/admin/new-post',
+    name: 'AdminNewPost',
+    component: () => import('@/views/admin/NewPost.vue'),
+    meta: { requiresAdmin: true, title: 'Nuovo post — Italian Spotlight' },
+  },
+  {
     path: '/profile/:username',
     name: 'Profile',
     component: () => import('@/views/ProfileView.vue'),
     meta: { title: 'Profilo — Italian Spotlight' },
   },
   {
-    path: '/auth',
+    path: '/login',
+    alias: '/auth',
     name: 'Auth',
     component: () => import('@/views/AuthView.vue'),
     meta: { title: 'Accedi — Italian Spotlight' },
@@ -61,6 +90,18 @@ const routes = [
     name: 'Excursus',
     component: () => import('@/views/ExcursusView.vue'),
     meta: { title: 'Excursus — Italian Spotlight' },
+  },
+  {
+    path: '/blog',
+    name: 'Blog',
+    component: () => import('@/views/blog/PostList.vue'),
+    meta: { title: 'Blog — Italian Spotlight' },
+  },
+  {
+    path: '/blog/:id',
+    name: 'BlogDetail',
+    component: () => import('@/views/blog/PostDetail.vue'),
+    meta: { title: 'Post — Italian Spotlight' },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -79,28 +120,33 @@ const router = createRouter({
   },
 })
 
+
+
+const isAdmin = async () => {
+  const currentUser = auth.currentUser
+
+  if (!currentUser?.uid) {
+    return false
+  }
+
+  const snapshot = await getDoc(doc(db, 'profiles', currentUser.uid))
+  return snapshot.exists() && snapshot.data()?.admin === true
+}
+
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
 
-  // Evita blocchi indefiniti della navigazione se auth non si inizializza.
-  if (authStore.loading) {
-    await Promise.race([
-      new Promise((resolve) => {
-        const unsubscribe = authStore.$subscribe((_mutation, state) => {
-          if (!state.loading) {
-            unsubscribe()
-            resolve()
-          }
-        })
-      }),
-      new Promise((resolve) => setTimeout(resolve, 2500)),
-    ])
+  if (to.meta.requiresAdmin) {
+    const canAccessAdminArea = await isAdmin()
+
+    if (!canAccessAdminArea) {
+      next({ path: '/login', query: { redirect: to.fullPath, reason: 'admin_required' } })
+      return
+    }
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ name: 'Auth', query: { redirect: to.fullPath, reason: 'login_required' } })
-  } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
-    next({ name: 'Home' })
+    next({ path: '/login', query: { redirect: to.fullPath, reason: 'login_required' } })
   } else if (to.name === 'Auth' && authStore.isAuthenticated) {
     next({ name: 'Home' })
   } else {

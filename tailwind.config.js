@@ -12,8 +12,8 @@ export default {
         tertiary: '#0ADD08',
       },
       fontFamily: {
-        'sans': ['Suisse Int\'l', 'sans-serif'],
-        'mono': ['Suisse Int\'l Mono', 'monospace'],
+        'sans': ['"Suisse Int\'l"', 'sans-serif'],
+        'mono': ['"Suisse Int\'l Mono"', 'monospace'],
       },
     },
   },

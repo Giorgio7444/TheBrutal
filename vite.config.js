@@ -13,13 +13,7 @@ export default defineConfig({
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router', 'pinia'],
           'firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
-          'editor': [
-            '@tiptap/vue-3',
-            '@tiptap/starter-kit',
-            '@tiptap/extension-image',
-            '@tiptap/extension-link',
-            '@tiptap/extension-placeholder',
-          ],
+          'editor': ['@editorjs/editorjs', '@editorjs/header', '@editorjs/list', '@editorjs/quote'],
         },
       },
     },

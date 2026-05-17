@@ -1,17 +1,17 @@
 <template>
-  <main class="min-h-screen bg-neutral-50 dark:bg-neutral-950 pt-24 pb-16">
+  <main class="min-h-screen bg-primary pt-24 pb-16">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
       <h1
-        class="text-neutral-950 dark:text-white mb-4"
+        class="text-secondary mb-4"
         style="font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700;"
       >
         Excursus
       </h1>
-      <p class="text-neutral-600 dark:text-neutral-400 text-lg mb-12 border-b border-neutral-200 dark:border-neutral-800 pb-8">
+      <p class="text-secondary/70 text-lg mb-12 border-b border-secondary/20 pb-8">
         Dal béton brut al pixel grezzo: genealogia di un'estetica.
       </p>
 
-      <div class="prose dark:prose-invert prose-neutral max-w-none">
+      <div class="prose max-w-none">
         <h2>Le origini: cemento, verità e utopia sociale</h2>
         <p>
           Il termine «brutalismo» deriva dal francese <em>béton brut</em> — cemento grezzo, a vista —

@@ -1,38 +1,38 @@
 <template>
-  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+  <div class="min-h-screen bg-primary">
     <div class="py-20 px-4">
       <div class="mx-auto max-w-7xl">
         <h1
-          class="text-neutral-950 dark:text-white mb-12"
+          class="text-secondary mb-12"
           style="font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400;"
         >
           Categorie
         </h1>
 
-        <div class="divide-y divide-neutral-200 dark:divide-neutral-800 border-t border-b border-neutral-200 dark:border-neutral-800">
+        <div class="divide-y divide-secondary/20 border-t border-b border-secondary/20">
           <button
             v-for="category in categories"
             :key="category.slug"
             @click="goToCategory(category.slug)"
-            class="w-full flex items-center justify-between gap-6 py-6 px-4 text-left hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors cursor-pointer"
+            class="w-full flex items-center justify-between gap-6 py-6 px-4 text-left hover:bg-secondary/5 transition-colors cursor-pointer"
           >
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-3 mb-1">
                 <span
-                  class="text-neutral-950 dark:text-white shrink-0"
+                  class="text-secondary shrink-0"
                   style="font-family: 'Playfair Display', serif; font-size: 1.5rem;"
                 >
                   {{ category.name }}
                 </span>
-                <span class="text-xs font-medium text-teal-700 dark:text-teal-400 bg-teal-100 dark:bg-teal-950 px-2 py-0.5 rounded-full shrink-0">
+                <span class="text-xs font-medium text-secondary bg-tertiary/20 px-2 py-0.5 rounded-full shrink-0">
                   {{ category.count }} articoli
                 </span>
               </div>
-              <span class="text-sm text-neutral-500 dark:text-neutral-400 hidden sm:block">
+              <span class="text-sm text-secondary/60 hidden sm:block">
                 {{ category.description }}
               </span>
             </div>
-            <span class="text-neutral-400 dark:text-neutral-600 text-xl shrink-0">→</span>
+            <span class="text-secondary/50 text-xl shrink-0">→</span>
           </button>
         </div>
       </div>
@@ -55,6 +55,6 @@ const categories = [
 ]
 
 const goToCategory = (slug) => {
-  router.push(`/articles?tag=${slug}`)
+  router.push(`/designers?tag=${slug}`)
 }
 </script>

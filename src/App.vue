@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import AppNavbar from '@/components/layout/AppNavbar.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
 
@@ -10,6 +11,8 @@ const showChrome = computed(() => route.name !== 'Home')
 
 <template>
   <div class="min-h-screen bg-primary text-secondary">
+    <AppNavbar />
+
     <main>
       <router-view v-slot="{ Component, route }">
         <Transition
