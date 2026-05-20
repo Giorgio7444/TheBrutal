@@ -1,6 +1,6 @@
 <template>
-  <footer class="bg-secondary mt-20">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+  <footer class="min-h-screen bg-secondary mb-40">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 bg-secondary">
 
         <!-- About -->
         <div>

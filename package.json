@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@editorjs/editorjs": "^2.31.6",
-    "@editorjs/image": "^2.9.3",
     "@editorjs/header": "^2.8.9",
+    "@editorjs/image": "^2.9.3",
     "@editorjs/list": "^2.0.9",
     "@editorjs/quote": "^2.7.6",
     "dompurify": "^3.3.3",
@@ -22,6 +22,7 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@google-cloud/storage": "^5.18.3",
     "@tailwindcss/typography": "^0.5.17",
     "@vitejs/plugin-vue": "^6.0.4",
     "autoprefixer": "^10.4.27",
