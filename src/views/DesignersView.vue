@@ -15,7 +15,7 @@
         </p>
       </div>
 
-      <div v-else class="grid grid-cols-4 gap-0 w-full">
+      <div v-else class="grid grid-cols-4 gap-0 w-full mb-[5vh]">
         <ArticleCard
           v-for="post in posts"
           :key="post.id"

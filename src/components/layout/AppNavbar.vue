@@ -31,6 +31,15 @@
           Admin
         </router-link>
 
+        <button
+          v-if="authStore.isAuthenticated"
+          type="button"
+          class="transition-opacity hover:opacity-80"
+          @click="handleSignOut"
+        >
+          Esci
+        </button>
+
         <router-link
           v-else-if="!authStore.isAuthenticated"
           to="/login"
@@ -45,11 +54,13 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useAdminState } from '@/composables/useAdminState'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 
 const authStore = useAuthStore()
+const router = useRouter()
 const { isAdmin } = useAdminState()
 
 const profileLabel = computed(() => {
@@ -57,11 +68,16 @@ const profileLabel = computed(() => {
 })
 
 const avatarUrl = computed(() => {
-  return authStore.profile?.avatar_url || authStore.user?.photoURL || null
+  return authStore.profile?.avatar_url || null
 })
 
 const profileHref = computed(() => {
   const username = authStore.profile?.username
   return username ? `/profile/${username}` : null
 })
+
+const handleSignOut = async () => {
+  await authStore.signOut()
+  await router.push('/login')
+}
 </script>
