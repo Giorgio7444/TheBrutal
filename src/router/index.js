@@ -73,11 +73,11 @@ const routes = [
     meta: { title: 'Profilo — Italian Spotlight' },
   },
   {
-    path: '/login',
-    alias: '/auth',
-    name: 'Auth',
-    component: () => import('@/views/AuthView.vue'),
-    meta: { title: 'Accedi — Italian Spotlight' },
+    path: '/about',
+    alias: ['/auth', '/login'],
+    name: 'About',
+    component: () => import('@/views/AboutView.vue'),
+    meta: { title: 'Chi siamo — Italian Spotlight' },
   },
   {
     path: '/manifesto',
@@ -140,15 +140,13 @@ router.beforeEach(async (to, _from, next) => {
     const canAccessAdminArea = await isAdmin()
 
     if (!canAccessAdminArea) {
-      next({ path: '/login', query: { redirect: to.fullPath, reason: 'admin_required' } })
+      next({ path: '/about', query: { redirect: to.fullPath, reason: 'admin_required' } })
       return
     }
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ path: '/login', query: { redirect: to.fullPath, reason: 'login_required' } })
-  } else if (to.name === 'Auth' && authStore.isAuthenticated) {
-    next({ name: 'Home' })
+    next({ path: '/about', query: { redirect: to.fullPath, reason: 'login_required' } })
   } else {
     next()
   }

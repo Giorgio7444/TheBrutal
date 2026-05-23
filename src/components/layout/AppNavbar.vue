@@ -78,6 +78,6 @@ const profileHref = computed(() => {
 
 const handleSignOut = async () => {
   await authStore.signOut()
-  await router.push('/login')
+  await router.push('/about')
 }
 </script>

@@ -22,7 +22,7 @@ import bgGif from '../../assets/bg.gif'
 
 const homeLinks = [
   { to: '/designers', label: 'Designers' },
-  { to: '/auth', label: 'Iscrizioni' },
+  { to: '/about', label: 'About' },
   { to: '/manifesto', label: 'Manifesto' },
   { to: '/profile', label: 'Profilo' },
 ]
