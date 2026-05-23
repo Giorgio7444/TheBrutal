@@ -3,7 +3,7 @@
     <section class="flex items-center justify-center">
       <div class="w-[90vw]">
         <div class="min-h-[30vw] item-center justify-center mt-[10vw]">
-          <h1 class="text-center uppercase manifesto-title">
+          <h1 class="text-center uppercase manititle">
           Manifesto<br>Post-brutalista
         </h1>
         </div>
