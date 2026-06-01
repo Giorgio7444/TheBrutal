@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { db, storage, isStorageEnabled } from '@/lib/firebase'
+import { auth, db, storage, isStorageEnabled } from '@/lib/firebase'
 import {
   collection,
   doc,
@@ -232,14 +232,22 @@ export const useArticlesStore = defineStore('articles', () => {
         throw new Error('Storage not configured')
       }
 
+      if (!auth.currentUser) {
+        throw new Error('Utente Firebase non autenticato: impossibile caricare su Storage')
+      }
+
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
       const fileRef = storageRef(storage, `${bucket}/${fileName}`)
 
+      console.info(`[Storage] Upload ${bucket} as ${auth.currentUser.uid}`)
       await uploadBytes(fileRef, file)
       return await getDownloadURL(fileRef)
     } catch (err) {
       error.value = err.message
+      if (err?.code === 'storage/unauthorized') {
+        error.value = 'Permessi Storage insufficienti per caricare immagini. Verifica le regole Firebase Storage.'
+      }
       console.error(`Upload to ${bucket} error:`, err)
       throw err
     }

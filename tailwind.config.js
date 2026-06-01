@@ -9,7 +9,7 @@ export default {
       colors: {
         primary: '#f1f1f1',
         secondary: '#000000',
-        tertiary: '#0ADD08',
+        tertiary: '#ffdc00',
       },
       fontFamily: {
         'sans': ['"Suisse Int\'l"', 'sans-serif'],

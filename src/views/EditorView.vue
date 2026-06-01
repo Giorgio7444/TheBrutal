@@ -1,134 +1,213 @@
 <template>
-  <div class="min-h-screen bg-primary py-12 px-4">
-    <div class="mx-auto max-w-4xl">
-      <!-- Success Overlay (FEAT 1) -->
-      <div v-if="publishedArticle" class="fixed inset-0 z-50 flex items-center justify-center bg-secondary/60 backdrop-blur-sm">
-        <div class="bg-primary border border-secondary/20 rounded-lg p-8 max-w-md w-full mx-4 text-center">
-          <div class="w-16 h-16 bg-tertiary/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-8 h-8 text-tertiary" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-            </svg>
-          </div>
-          <h2 class="text-2xl font-bold text-secondary mb-2" style="font-family: 'Playfair Display', serif;">
-            Articolo pubblicato
-          </h2>
-          <p class="text-secondary/70 mb-6">
-            {{ publishedArticle.title }}
-          </p>
-          <div class="flex flex-col gap-3">
-            <router-link :to="`/details/${publishedArticle.id}`" class="px-6 py-3 rounded-lg bg-tertiary text-secondary hover:bg-tertiary/90 transition-colors font-medium">
-              Visualizza articolo
-            </router-link>
-            <button
-              @click="writeAnother"
-              class="px-6 py-3 rounded-lg border border-secondary/20 bg-primary hover:bg-secondary/5 transition-colors font-medium text-secondary"
-            >
-              Scrivi un altro
-            </button>
-          </div>
+  <div class="min-h-screen">
+    <!-- Success Overlay (FEAT 1) -->
+    <div v-if="publishedArticle" class="fixed inset-0 z-50 flex items-center justify-center bg-secondary/60 backdrop-blur-sm">
+      <div class="bg-primary border border-secondary/20 rounded-lg p-8 max-w-md w-full mx-4 text-center">
+        <div class="w-16 h-16 bg-tertiary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-tertiary" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-secondary mb-2" style="font-family: 'Playfair Display', serif;">
+          Articolo pubblicato
+        </h2>
+        <p class="text-secondary/70 mb-6">
+          {{ publishedArticle.title }}
+        </p>
+        <div class="flex flex-col gap-3">
+          <router-link :to="`/details/${publishedArticle.id}`" class="px-6 py-3 rounded-lg bg-tertiary text-secondary hover:bg-tertiary/90 transition-colors font-medium">
+            Visualizza articolo
+          </router-link>
+          <button
+            @click="writeAnother"
+            class="px-6 py-3 rounded-lg border border-secondary/20 bg-primary hover:bg-secondary/5 transition-colors font-medium text-secondary"
+          >
+            Scrivi un altro
+          </button>
         </div>
       </div>
+    </div>
 
-      <!-- Loading Skeleton (BUG 8) -->
-      <div v-if="isLoading" class="space-y-6 animate-pulse">
-        <div class="h-10 bg-secondary/20 rounded w-3/4"></div>
-        <div class="h-20 bg-secondary/20 rounded"></div>
-        <div class="h-64 bg-secondary/20 rounded"></div>
-        <div class="h-40 bg-secondary/20 rounded"></div>
-      </div>
+    <!-- Left slideshow (fixed) -->
+    <section class="fixed left-0 top-0 h-screen w-[50vw] overflow-hidden bg-black" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+      <div class="relative h-full w-full">
+        <div v-if="editorImages.length > 0" class="relative h-full w-full">
+          <Transition name="slide-fade" mode="out-in">
+            <div :key="activeImage?.src || 'image'" class="absolute inset-0">
+              <img
+                :src="activeImage.src"
+                :alt="activeImage.alt || formData.title"
+                class="h-full w-full object-cover"
+              />
+            </div>
+          </Transition>
 
-      <template v-else>
-        <!-- Header -->
-        <div class="mb-8">
-          <h1 class="font-sans text-4xl font-bold text-secondary mb-2">
-            {{ isEditing ? 'Modifica articolo' : 'Scrivi un nuovo articolo' }}
-          </h1>
-          <p class="text-secondary/70">
-            Condividi le tue riflessioni e idee con la comunità
-          </p>
-        </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
 
-      <!-- Form -->
-      <form @submit.prevent="handlePublish" class="space-y-6">
-        <!-- Excerpt -->
-        <div>
-          <textarea
-            v-model="formData.excerpt"
-            placeholder="Descrizione breve dell'articolo (apparirà nelle anteprime)"
-            class="w-full px-4 py-3 rounded-lg border border-secondary/20 bg-primary text-secondary placeholder-secondary/40 focus:outline-none focus:ring-2 focus:ring-tertiary transition-all resize-none"
-            rows="3"
-          />
-        </div>
+          <div class="absolute left-0 right-0 bottom-20 flex items-center justify-center gap-2 px-6">
+            <div class="flex items-center gap-2">
+              <button
+                v-for="(img, idx) in editorImages"
+                :key="img.src + idx"
+                type="button"
+                @click="activeImageIndex = idx"
+                :class="['w-16 h-10 overflow-hidden border', activeImageIndex === idx ? 'border-tertiary' : 'border-secondary/30']"
+                style="padding:0;"
+              >
+                <img :src="img.src" :alt="img.alt" class="w-full h-full object-cover" />
+              </button>
+            </div>
+          </div>
 
-        <!-- Editor -->
-        <div>
-          <label class="block text-sm font-medium text-secondary mb-3">
-            Contenuto
-          </label>
-          <PostEditor
-            ref="editorRef"
-            v-model:title="formData.title"
-            v-model="formData.content"
-            :cover-url="formData.cover_url"
-          />
-          <p v-if="contentError" class="mt-2 text-sm text-red-600">
-            {{ contentError }}
-          </p>
-        </div>
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6">
+            <div class="max-w-[70%]">
+              <p class="text-xs uppercase tracking-[0.3em] text-secondary/60">
+                {{ activeImageIndex + 1 }} / {{ editorImages.length }}
+              </p>
+              <p v-if="activeImage?.caption || activeImage?.alt" class="mt-2 text-sm text-secondary">
+                {{ activeImage.caption || activeImage.alt }}
+              </p>
+            </div>
 
-        <!-- Tags -->
-        <div>
-          <label class="block text-sm font-medium text-secondary mb-3">
-            Tag (separati da virgola)
-          </label>
-          <input
-            v-model="tagsInput"
-            type="text"
-            placeholder="es. design, estetica, digitale"
-            class="w-full px-4 py-2 rounded-lg border border-secondary/20 bg-primary text-secondary placeholder-secondary/40 focus:outline-none focus:ring-2 focus:ring-tertiary transition-all"
-          />
-          <div v-if="formData.tags.length > 0" class="flex flex-wrap gap-2 mt-3">
-            <span
-              v-for="tag in formData.tags"
-              :key="tag"
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary/20 text-secondary text-sm"
-            >
-              {{ tag }}
+            <div class="flex items-center gap-2">
               <button
                 type="button"
-                @click="removeTag(tag)"
-                class="hover:text-tertiary"
+                @click="prevImage"
+                :disabled="editorImages.length < 2"
+                class="h-11 w-11 border border-secondary/30 bg-black/60 text-secondary transition-colors hover:bg-tertiary hover:text-black disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Immagine precedente"
               >
-                ×
+                <svg class="mx-auto h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
               </button>
-            </span>
+              <button
+                type="button"
+                @click="nextImage"
+                :disabled="editorImages.length < 2"
+                class="h-11 w-11 border border-secondary/30 bg-black/60 text-secondary transition-colors hover:bg-tertiary hover:text-black disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Immagine successiva"
+              >
+                <svg class="mx-auto h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Actions -->
-        <div class="flex gap-4 pt-6 border-t border-secondary/20">
-          <button
-            type="button"
-            @click="saveDraft"
-            class="flex-1 px-6 py-3 rounded-lg border border-secondary/20 bg-primary hover:bg-secondary/5 transition-colors font-medium text-secondary"
-          >
-            {{ isEditing ? 'Salva modifiche come bozza' : 'Salva come bozza' }}
-          </button>
-          <button
-            type="submit"
-            class="flex-1 px-6 py-3 rounded-lg bg-tertiary text-secondary hover:bg-tertiary/90 transition-colors font-medium"
-          >
-            {{ isEditing ? 'Pubblica modifiche' : 'Pubblica articolo' }}
-          </button>
+        <div v-else class="flex h-full items-center justify-center p-8 text-center">
+          <p class="text-secondary/70">
+            Nessuna immagine nel contenuto.
+          </p>
         </div>
-      </form>
-      </template>
+      </div>
+    </section>
+
+    <!-- Right editor panel -->
+    <div class="ml-[50vw] min-h-screen w-[50vw] bg-primary py-12 px-4">
+      <div class="mx-auto max-w-4xl">
+        <!-- Loading Skeleton (BUG 8) -->
+        <div v-if="isLoading" class="space-y-6 animate-pulse">
+          <div class="h-10 bg-secondary/20 rounded w-3/4"></div>
+          <div class="h-20 bg-secondary/20 rounded"></div>
+          <div class="h-64 bg-secondary/20 rounded"></div>
+          <div class="h-40 bg-secondary/20 rounded"></div>
+        </div>
+
+        <template v-else>
+          <!-- Header -->
+          <div class="mb-8">
+            <h1 class="font-sans text-4xl font-bold text-secondary mb-2">
+              {{ isEditing ? 'Modifica articolo' : 'Scrivi un nuovo articolo' }}
+            </h1>
+            <p class="text-secondary/70">
+              Condividi le tue riflessioni e idee con la comunità
+            </p>
+          </div>
+
+        <!-- Form -->
+        <form @submit.prevent="handlePublish" class="space-y-6">
+          <!-- Excerpt -->
+          <div>
+            <textarea
+              v-model="formData.excerpt"
+              placeholder="Descrizione breve dell'articolo (apparirà nelle anteprime)"
+              class="w-full px-4 py-3 rounded-lg border border-secondary/20 bg-primary text-secondary placeholder-secondary/40 focus:outline-none focus:ring-2 focus:ring-tertiary transition-all resize-none"
+              rows="3"
+            />
+          </div>
+
+          <!-- Editor -->
+          <div>
+            <label class="block text-sm font-medium text-secondary mb-3">
+              Contenuto
+            </label>
+            <PostEditor
+              ref="editorRef"
+              v-model:title="formData.title"
+              v-model="formData.content"
+              :cover-url="formData.cover_url"
+            />
+            <p v-if="contentError" class="mt-2 text-sm text-red-600">
+              {{ contentError }}
+            </p>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <label class="block text-sm font-medium text-secondary mb-3">
+              Tag (separati da virgola)
+            </label>
+            <input
+              v-model="tagsInput"
+              type="text"
+              placeholder="es. design, estetica, digitale"
+              class="w-full px-4 py-2 rounded-lg border border-secondary/20 bg-primary text-secondary placeholder-secondary/40 focus:outline-none focus:ring-2 focus:ring-tertiary transition-all"
+            />
+            <div v-if="formData.tags.length > 0" class="flex flex-wrap gap-2 mt-3">
+              <span
+                v-for="tag in formData.tags"
+                :key="tag"
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary/20 text-secondary text-sm"
+              >
+                {{ tag }}
+                <button
+                  type="button"
+                  @click="removeTag(tag)"
+                  class="hover:text-tertiary"
+                >
+                  ×
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-4 pt-6 border-t border-secondary/20">
+            <button
+              type="button"
+              @click="saveDraft"
+              class="flex-1 px-6 py-3 rounded-lg border border-secondary/20 bg-primary hover:bg-secondary/5 transition-colors font-medium text-secondary"
+            >
+              {{ isEditing ? 'Salva modifiche come bozza' : 'Salva come bozza' }}
+            </button>
+            <button
+              type="submit"
+              class="flex-1 px-6 py-3 rounded-lg bg-tertiary text-secondary hover:bg-tertiary/90 transition-colors font-medium"
+            >
+              {{ isEditing ? 'Pubblica modifiche' : 'Pubblica articolo' }}
+            </button>
+          </div>
+        </form>
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useArticlesStore } from '@/stores/articles'
@@ -157,6 +236,81 @@ const formData = ref({
 
 const isEditing = computed(() => !!route.params.id)
 
+// Slideshow state for editor preview
+const activeImageIndex = ref(0)
+
+const editorImages = computed(() => {
+  const blocks = Array.isArray(formData.value.content?.blocks) ? formData.value.content.blocks : []
+
+  return blocks
+    .filter((block) => block?.type === 'image')
+    .map((block) => {
+      const data = block?.data || {}
+      const src = data.file?.url || data.url || ''
+
+      return {
+        src,
+        alt: data.alt || data.caption || formData.value.title || '',
+        caption: data.caption || '',
+      }
+    })
+    .filter((image) => image.src)
+})
+
+const activeImage = computed(() => editorImages.value[activeImageIndex.value] || null)
+
+watch(
+  () => formData.value.content,
+  () => {
+    activeImageIndex.value = 0
+  }
+)
+
+watch(
+  () => editorImages.value.length,
+  (len) => {
+    if (len > 1) startAutoplay()
+    else stopAutoplay()
+  }
+)
+
+// Autoplay and hover state for editor slideshow
+const isHovered = ref(false)
+const autoplay = ref(true)
+const autoplayInterval = ref(4000)
+const autoplayTimer = ref(null)
+
+const startAutoplay = () => {
+  stopAutoplay()
+  if (!autoplay.value || editorImages.value.length < 2) return
+  autoplayTimer.value = setInterval(() => {
+    if (!isHovered.value) {
+      activeImageIndex.value = (activeImageIndex.value + 1) % editorImages.value.length
+    }
+  }, autoplayInterval.value)
+}
+
+const stopAutoplay = () => {
+  if (autoplayTimer.value) {
+    clearInterval(autoplayTimer.value)
+    autoplayTimer.value = null
+  }
+}
+
+onBeforeUnmount(() => {
+  stopAutoplay()
+})
+
+const nextImage = () => {
+  if (editorImages.value.length < 2) return
+  activeImageIndex.value = (activeImageIndex.value + 1) % editorImages.value.length
+}
+
+const prevImage = () => {
+  if (editorImages.value.length < 2) return
+  activeImageIndex.value = (activeImageIndex.value - 1 + editorImages.value.length) % editorImages.value.length
+}
+
 onMounted(async () => {
     isLoading.value = true
     try {
@@ -180,6 +334,7 @@ onMounted(async () => {
     } finally {
       isLoading.value = false
     }
+  startAutoplay()
 })
 
 watch(() => tagsInput.value, (newVal) => {

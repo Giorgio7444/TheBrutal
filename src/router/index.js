@@ -73,6 +73,25 @@ const routes = [
     meta: { title: 'Profilo — Italian Spotlight' },
   },
   {
+    path: '/profile',
+    name: 'ProfileMe',
+    redirect: async () => {
+      const currentUser = auth.currentUser
+      if (!currentUser?.uid) {
+        return { path: '/auth', query: { reason: 'login_required', redirect: '/profile' } }
+      }
+
+      const snapshot = await getDoc(doc(db, 'profiles', currentUser.uid))
+      const username = snapshot.exists() ? snapshot.data()?.username : null
+
+      if (!username) {
+        return { path: '/auth' }
+      }
+
+      return { path: `/profile/${username}` }
+    },
+  },
+  {
     path: '/login',
     alias: '/auth',
     name: 'Auth',

@@ -46,10 +46,10 @@ import { useToast } from '@/composables/useToast'
 const { toasts, removeToast } = useToast()
 
 const typeClasses = {
-  success: 'bg-tertiary/20 border-tertiary/40 text-secondary',
-  error: 'bg-red-100 border-red-300 text-red-800',
-  info: 'bg-secondary/10 border-secondary/20 text-secondary',
-  warning: 'bg-yellow-100 border-yellow-300 text-yellow-800',
+  success: 'bg-primary border-secondary/20 text-secondary',
+  error: 'bg-[#5f0a0a] border-[#7f1212] text-primary',
+  info: 'bg-primary border-secondary/20 text-secondary',
+  warning: 'bg-primary border-secondary/20 text-secondary',
 }
 </script>
 

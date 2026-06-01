@@ -15,6 +15,8 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  arrayUnion,
+  arrayRemove,
   serverTimestamp,
   collection,
   query,
@@ -32,6 +34,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!user.value)
   const isAdmin = computed(() => profile.value?.admin === true)
+  const favoritePostIds = computed(() => {
+    const ids = profile.value?.favorite_post_ids
+    return Array.isArray(ids) ? ids : []
+  })
 
   const normalizeUsernameBase = (value) => {
     const base = (value || '')
@@ -114,7 +120,10 @@ export const useAuthStore = defineStore('auth', () => {
       username,
       display_name: displayName,
       bio: null,
+      bio_heading: null,
       avatar_url: cachedAvatarUrl,
+      cover_image_url: null,
+      favorite_post_ids: [],
       created_at: serverTimestamp(),
     }
 
@@ -322,6 +331,69 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const uploadProfileCover = async (file) => {
+    try {
+      if (!user.value) throw new Error('No user logged in')
+      error.value = null
+
+      if (!isStorageEnabled || !storage) {
+        throw new Error('Storage not configured')
+      }
+
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user.value.id}-cover-${Date.now()}.${fileExt}`
+      const coverRef = storageRef(storage, `profile-covers/${fileName}`)
+
+      await uploadBytes(coverRef, file)
+      const url = await getDownloadURL(coverRef)
+
+      await updateProfile({ cover_image_url: url })
+      return url
+    } catch (err) {
+      error.value = err.message
+      if (err?.code === 'storage/unauthorized') {
+        error.value = 'Permessi Storage insufficienti per caricare la cover profilo. Aggiorna le regole Firebase Storage per profile-covers.'
+      }
+      console.error('Upload profile cover error:', err)
+      throw err
+    }
+  }
+
+  const toggleFavoritePost = async (postId) => {
+    try {
+      if (!user.value) throw new Error('No user logged in')
+      if (!postId) throw new Error('Missing post ID')
+
+      error.value = null
+
+      const alreadyFavorite = favoritePostIds.value.includes(postId)
+      const profileRef = doc(db, 'profiles', user.value.id)
+
+      await updateDoc(profileRef, {
+        favorite_post_ids: alreadyFavorite ? arrayRemove(postId) : arrayUnion(postId),
+      })
+
+      const nextIds = alreadyFavorite
+        ? favoritePostIds.value.filter((id) => id !== postId)
+        : [...favoritePostIds.value, postId]
+
+      profile.value = {
+        ...(profile.value || {}),
+        favorite_post_ids: nextIds,
+      }
+
+      return !alreadyFavorite
+    } catch (err) {
+      error.value = err.message
+      console.error('Toggle favorite post error:', err)
+      throw err
+    }
+  }
+
+  const isFavoritePost = (postId) => {
+    return favoritePostIds.value.includes(postId)
+  }
+
   return {
     user,
     profile,
@@ -329,6 +401,7 @@ export const useAuthStore = defineStore('auth', () => {
     error,
     isAuthenticated,
     isAdmin,
+    favoritePostIds,
     initializeAuth,
     fetchProfileByUsername,
     fetchProfileById,
@@ -338,5 +411,8 @@ export const useAuthStore = defineStore('auth', () => {
     signOut,
     updateProfile,
     uploadAvatar,
+    uploadProfileCover,
+    toggleFavoritePost,
+    isFavoritePost,
   }
 })

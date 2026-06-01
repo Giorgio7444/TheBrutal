@@ -10,7 +10,7 @@ const showChrome = computed(() => route.name !== 'Home')
 </script>
 
 <template>
-  <div class="min-h-screen bg-primary text-secondary">
+  <div class="app-shell min-h-screen bg-secondary text-primary">
     <AppNavbar />
 
     <main>
@@ -34,6 +34,11 @@ const showChrome = computed(() => route.name !== 'Home')
 </template>
 
 <style>
+main > * {
+  background-color: #000000 !important;
+  color: #f1f1f1 !important;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;

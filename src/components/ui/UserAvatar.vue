@@ -1,11 +1,12 @@
 <template>
   <img
-    v-if="avatarUrl"
+    v-if="showImage && avatarUrl"
     :src="avatarUrl"
     :alt="username"
     referrerpolicy="strict-origin-when-cross-origin"
     class="rounded-full object-cover"
     :class="sizeClasses"
+    @error="handleImageError"
   />
   <div
     v-else
@@ -16,7 +17,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   avatarUrl: String,
@@ -27,6 +28,19 @@ const props = defineProps({
     validator: (v) => ['xs', 'sm', 'md', 'lg', 'xl'].includes(v),
   },
 })
+
+const showImage = ref(true)
+
+const handleImageError = () => {
+  showImage.value = false
+}
+
+watch(
+  () => props.avatarUrl,
+  () => {
+    showImage.value = true
+  }
+)
 
 const sizeClasses = computed(() => {
   const sizes = {
