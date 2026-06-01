@@ -65,7 +65,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import PostEditor from '@/components/editor/PostEditor.vue'
 import PostImageManager from '@/components/editor/PostImageManager.vue'
@@ -76,6 +76,7 @@ import { useToast } from '@/composables/useToast'
 import { getEditorTextBlocks, mergeEditorContentWithImages, normalizeEditorContent, normalizePostImages } from '@/lib/utils'
 
 const route = useRoute()
+const router = useRouter()
 const toast = useToast()
 const articlesStore = useArticlesStore()
 const authStore = useAuthStore()
@@ -164,10 +165,12 @@ const savePost = async (status) => {
       updatedAt: serverTimestamp(),
     })
 
-    setFeedback('success', status === 'draft' ? 'Bozza aggiornata con successo.' : 'Post pubblicato con successo.')
-    if (status === 'draft') {
-      toast.success('Bozza aggiornata con successo.')
-    }
+setFeedback('success', status === 'draft' ? 'Bozza aggiornata con successo.' : 'Post pubblicato con successo.')
+if (status === 'published') {
+  await router.push({ name: 'AdminPosts' })
+} else {
+  toast.success('Bozza aggiornata con successo.')
+}
   } catch (err) {
     console.error('Update post error:', err)
     setFeedback('error', 'Impossibile aggiornare il post.')

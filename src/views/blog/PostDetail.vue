@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-primary lg:overflow-hidden">
+  <div class="min-h-screen bg-secondary lg:overflow-hidden">
     <div class="flex h-screen flex-col lg:h-[calc(100dvh-4.5rem)] lg:flex-row lg:items-start">
       <aside class="relative h-[93vh] overflow-hidden border-b border-secondary/20 bg-secondary/5 lg:h-[93vh] lg:w-[40vw] lg:shrink-0 lg:border-b-0 lg:border-r">
-        <div v-if="loading" class="flex h-full items-center justify-center px-6 text-center text-secondary/70">
+        <div v-if="loading" class="flex h-full items-center justify-center px-6 text-center text-primary/70">
           Caricamento post...
         </div>
 
@@ -58,15 +58,15 @@
         <div class="mx-auto w-full max-w-3xl">
           <template v-if="post">
             <p class="mb-4 text-sm uppercase tracking-[0.3em] text-tertiary">Blog</p>
-            <h1 class="font-sans text-4xl font-bold text-secondary sm:text-5xl">{{ post.title }}</h1>
-            <p class="mt-4 text-sm text-secondary/70">{{ formatDate(post.createdAt) }}</p>
+            <h1 class="text-primary sm:text-5xl">{{ post.title }}</h1>
+            <p class="mt-4 text-sm text-primary/70">{{ formatDate(post.createdAt) }}</p>
 
-            <div class="prose prose-neutral mt-10 max-w-none prose-headings:font-sans prose-headings:text-secondary prose-p:text-secondary/90 prose-li:text-secondary/90 prose-blockquote:border-tertiary prose-blockquote:text-secondary/80">
+            <div class="prose prose-neutral mt-10 max-w-none prose-headings:font-sans prose-headings:bg-secondary prose-p:text-primary/90 prose-li:text-primary/90 prose-blockquote:border-tertiary prose-blockquote:text-primary/80">
               <div v-html="renderedContent" />
             </div>
           </template>
 
-          <div v-else-if="!loading && !errorMessage" class="rounded-2xl border border-secondary/20 bg-primary p-8 text-secondary/70">
+          <div v-else-if="!loading && !errorMessage" class="rounded-2xl border border-secondary/20 bg-primary p-8 text-primary/70">
             Post non trovato.
           </div>
         </div>

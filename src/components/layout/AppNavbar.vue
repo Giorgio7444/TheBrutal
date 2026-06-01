@@ -6,6 +6,19 @@
       </router-link>
 
       <nav class="flex items-center gap-4 text-sm font-medium text-primary">
+  <router-link to="/designers" class="transition-opacity hover:opacity-80">
+    Designers
+  </router-link>
+  <router-link to="/manifesto" class="transition-opacity hover:opacity-80">
+    Manifesto
+  </router-link>
+  <router-link
+    v-if="authStore.isAuthenticated && profileHref"
+    :to="profileHref"
+    class="transition-opacity hover:opacity-80"
+  >
+    Profilo
+  </router-link>
         <router-link
           v-if="authStore.isAuthenticated && profileHref"
           :to="profileHref"

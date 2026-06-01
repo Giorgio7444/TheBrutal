@@ -13,12 +13,9 @@ const showChrome = computed(() => route.name !== 'Home')
   <div class="app-shell min-h-screen bg-secondary text-primary">
     <AppNavbar />
 
-    <main>
+    <main class="bg-secondary">
       <router-view v-slot="{ Component, route }">
-        <Transition
-          name="fade"
-          mode="out-in"
-        >
+        <Transition name="fade">
           <component
             :is="Component"
             :key="route.path"
@@ -34,9 +31,9 @@ const showChrome = computed(() => route.name !== 'Home')
 </template>
 
 <style>
-main > * {
-  background-color: #000000 !important;
-  color: #f1f1f1 !important;
+main {
+  background-color: #000000;
+  color: #f1f1f1;
 }
 
 .fade-enter-active,

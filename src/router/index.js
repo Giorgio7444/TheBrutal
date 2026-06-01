@@ -74,23 +74,30 @@ const routes = [
   },
   {
     path: '/profile',
-    name: 'ProfileMe',
-    redirect: async () => {
-      const currentUser = auth.currentUser
-      if (!currentUser?.uid) {
-        return { path: '/auth', query: { reason: 'login_required', redirect: '/profile' } }
-      }
+  name: 'ProfileMe',
+  redirect: async () => {
+    // Aspetta che Firebase sia pronto
+    const currentUser = await new Promise((resolve) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        unsubscribe()
+        resolve(user)
+      })
+    })
 
-      const snapshot = await getDoc(doc(db, 'profiles', currentUser.uid))
-      const username = snapshot.exists() ? snapshot.data()?.username : null
+    if (!currentUser?.uid) {
+      return { path: '/auth', query: { reason: 'login_required', redirect: '/profile' } }
+    }
 
-      if (!username) {
-        return { path: '/auth' }
-      }
+    const snapshot = await getDoc(doc(db, 'profiles', currentUser.uid))
+    const username = snapshot.exists() ? snapshot.data()?.username : null
 
-      return { path: `/profile/${username}` }
-    },
+    if (!username) {
+      return { path: '/auth' }
+    }
+
+    return { path: `/profile/${username}` }
   },
+},
   {
     path: '/login',
     alias: '/auth',

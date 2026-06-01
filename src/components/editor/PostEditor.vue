@@ -148,16 +148,15 @@ onMounted(async () => {
   })
 })
 
-onBeforeUnmount(() => {
-  if (editor?.destroy) {
-    editor.destroy()
+onBeforeUnmount(async () => {
+  try {
+    if (editor?.destroy) {
+      await editor.destroy()
+    }
+  } catch {
+  } finally {
+    editor = null
   }
-
-  if (coverPreviewUrl.value) {
-    URL.revokeObjectURL(coverPreviewUrl.value)
-  }
-
-  editor = null
 })
 
 defineExpose({

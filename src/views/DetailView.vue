@@ -83,7 +83,7 @@
         </div>
       </section>
 
-      <article class="ml-[50vw] min-h-screen w-[50vw] bg-secondary px-8 py-20 lg:px-12">
+      <article class="ml-[50vw] min-h-screen w-[50vw] bg-secondary text-primary px-8 py-20 lg:px-12">
         <div class="mx-auto max-w-3xl">
           <div class="mb-12">
             <div class="flex flex-wrap gap-2 mb-6">
@@ -95,7 +95,7 @@
             </div>
 
             <div class="mb-6 flex items-start justify-between gap-4">
-              <h1 class="font-sans text-5xl md:text-6xl font-bold text-primary">
+              <h1 class="font-bold text-primary">
                 {{ article.title }}
               </h1>
               <button
@@ -121,7 +121,7 @@
                 <router-link :to="`/profile/${article.profiles?.username}`" class="font-sans text-2xl font-bold text-primary hover:text-tertiary transition-colors">
                   {{ authorName }}
                 </router-link>
-                <p class="text-sm text-primary/70">
+                <p class="text-sm text-primary">
                   {{ formatDate(article.created_at) }}
                 </p>
               </div>
