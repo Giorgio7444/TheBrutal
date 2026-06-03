@@ -112,10 +112,10 @@ const routes = [
     meta: { title: 'Manifesto — Italian Spotlight' },
   },
   {
-    path: '/excursus',
-    name: 'Excursus',
-    component: () => import('@/views/ExcursusView.vue'),
-    meta: { title: 'Excursus — Italian Spotlight' },
+    path: '/bookshelf',
+    name: 'Bookshelf',
+    component: () => import('@/views/BookshelfView.vue'),
+    meta: { title: 'Bookshelf' },
   },
   {
     path: '/blog',

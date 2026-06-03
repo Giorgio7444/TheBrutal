@@ -1,52 +1,34 @@
 <template>
-  <section class="flex h-full min-h-0 flex-col border-r border-secondary/20 bg-primary">
-    <div class="shrink-0 border-b border-secondary/20 px-6 py-5">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <p class="text-xs uppercase tracking-[0.3em] text-secondary/60">Media</p>
-          <h2 class="mt-2 font-sans text-2xl font-bold text-secondary">Immagini del post</h2>
-        </div>
-
-        <button
-          type="button"
-          class="rounded-full border border-secondary/20 bg-primary px-4 py-2 text-sm font-medium text-secondary transition-colors hover:bg-secondary/5 disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="isUploading || disabled"
-          @click="triggerFilePicker"
-        >
-          {{ isUploading ? 'Caricamento...' : 'Aggiungi immagini' }}
-        </button>
-      </div>
-    </div>
-
-    <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
-      <div v-if="!images.length" class="flex h-full min-h-[18rem] items-center justify-center rounded-2xl border border-dashed border-secondary/20 bg-secondary/5 px-6 text-center text-secondary/60">
-        Aggiungi una o più immagini per costruire la galleria del post.
+  <section class="flex h-full min-h-0 flex-col bg-secondary">
+    <div class="min-h-0 flex-1 overflow-y-auto pr-4 sm:pr-4">
+      <div v-if="!images.length" class="flex h-full h-[60vh] mb-4 items-center justify-center bg-primary/10 px-6 text-center text-primary/80">
+        Add one or more images to build the post gallery.
       </div>
 
-      <div v-else class="space-y-3">
+      <div v-else class="h-[60vh] overflow-y-auto">
         <article
           v-for="(image, index) in images"
           :key="image.id"
-          class="group flex min-h-[120px] w-full items-stretch gap-3 rounded-2xl border border-secondary/20 bg-primary p-3 shadow-sm transition-colors hover:border-tertiary/40"
+          class="group flex min-h-[120px] w-full items-stretch p-4 gap-3 transition-colors hover:bg-primary/20"
           draggable="true"
           @dragstart="startDrag(index)"
           @dragend="endDrag"
           @dragover.prevent
           @drop.prevent="dropOn(index)"
         >
-          <div class="flex h-[120px] w-[120px] shrink-0 overflow-hidden rounded-xl border border-secondary/20 bg-secondary/5">
+          <div class="flex h-[120px] w-[120px] shrink-0 overflow-hidden">
             <img :src="image.url" :alt="image.alt || image.name" class="h-full w-full object-cover" />
           </div>
 
-          <div class="min-w-0 flex-1 py-1">
-            <p class="truncate text-base font-medium text-secondary">{{ image.name }}</p>
-            <p class="mt-3 text-xs uppercase tracking-[0.25em] text-secondary/40">Slide {{ index + 1 }}</p>
+          <div class="min-w-0 flex-1">
+            <p class="text-xs uppercase text-tertiary">Slide {{ index + 1 }}</p>
+            <p class="truncate text-primary font-bold">{{ image.name }}</p>
           </div>
 
           <div class="flex shrink-0 flex-col items-stretch gap-2">
             <button
               type="button"
-              class="flex h-9 w-9 items-center justify-center rounded-full border border-secondary/20 text-secondary/70 transition-colors hover:bg-secondary/5 hover:text-secondary"
+              class="flex h-7 w-7 items-center justify-center text-secondary bg-primary font-bold text-xl transition-colors hover:bg-tertiary"
               aria-label="Trascina per riordinare"
               title="Trascina per riordinare"
             >
@@ -54,7 +36,7 @@
             </button>
             <button
               type="button"
-              class="flex h-9 w-9 items-center justify-center rounded-full border border-red-200 text-red-700 transition-colors hover:bg-red-50"
+              class="flex h-7 w-7 items-center justify-center text-secondary bg-red-500 font-bold text-xl transition-colors hover:bg-red-600"
               aria-label="Elimina immagine"
               @click="removeImage(image.id)"
             >
@@ -63,6 +45,20 @@
           </div>
         </article>
       </div>
+
+    <div class="bg-secondary w-full mt-3 bg-primary">
+      <div>
+      <button
+          type="button"
+          class="inline-flex items-center justify-center py-[3.6%] px-4 bg-primary w-full h-full font-xs text-secondary transition-colors hover:bg-tertiary"
+          :disabled="isUploading || disabled"
+          @click="triggerFilePicker"
+        >
+          {{ isUploading ? 'Caricamento...' : 'Aggiungi immagini' }}
+        </button>
+      </div>
+    </div>
+
     </div>
 
     <input ref="fileInput" type="file" accept="image/*" class="hidden" multiple :disabled="disabled" @change="handleFileSelection" />

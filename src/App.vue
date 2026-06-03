@@ -6,7 +6,7 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
 
 const route = useRoute()
-const showChrome = computed(() => route.name !== 'Home')
+const showChrome = computed(() => route.name !== 'Home' && route.name !== 'Auth')
 </script>
 
 <template>

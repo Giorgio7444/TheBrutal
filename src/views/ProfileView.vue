@@ -8,33 +8,32 @@
     </div>
 
     <div v-else-if="profile" class="w-full">
-      <section class="relative h-screen w-full overflow-hidden">
+      <section class="relative h-[95svh] w-full overflow-hidden">
         <div class="absolute inset-0" :style="heroBackgroundStyle" />
-        <div class="absolute inset-0 bg-secondary/40" />
 
         <label
           v-if="isOwnProfile"
-          class="absolute right-5 top-24 z-20 inline-flex cursor-pointer items-center gap-2 rounded-full border border-primary/40 bg-secondary/80 px-4 py-2 text-xs uppercase tracking-[0.25em] text-primary transition-colors hover:bg-tertiary hover:text-secondary"
+          class="absolute right-5 top-[85svh] z-20 inline-flex bg-primary shadow-md shadow-black/10 px-4 py-2 text-xs uppercase text-secondary transition-colors hover:bg-tertiary hover:text-secondary hover:border-tertiary"
         >
           <input type="file" accept="image/*" class="hidden" @change="onCoverFileChange">
           {{ coverUploading ? 'Upload...' : 'Cambia cover' }}
         </label>
 
-        <div class="relative z-10 flex h-full items-center justify-center px-4">
+        <div class="relative z-10 flex h-full items-top justify-top pt-4">
           <h1 class="hero-title uppercase" :style="heroNameStyle">
             {{ displayName }}
           </h1>
         </div>
       </section>
 
-      <section class="grid w-full grid-cols-1 gap-8 bg-secondary px-4 py-10 lg:grid-cols-[70vw_30vw] lg:gap-0 lg:px-0">
-        <div class="border border-primary/20 bg-secondary p-6 lg:min-h-[60vh] lg:border-l-0 lg:border-y-0 lg:border-r lg:px-10">
-          <div class="mb-6 flex items-center justify-between gap-4">
-            <h2 class="font-sans text-3xl font-bold uppercase tracking-[0.15em] text-primary">Your Bio</h2>
+      <section class="grid w-full grid-cols-1 gap-8 bg-secondary py-10 justify-between lg:grid-cols-[60vw_40vw] lg:gap-0 lg:px-0">
+        <div class="bg-secondary lg:min-h-[60vh] pl-6 pr-6">
+          <div class="mb-12 flex items-center justify-between gap-4">
+            <h3 class="text-primary">YOUR BIOGRAPHY</h3>
             <button
               v-if="isOwnProfile"
               type="button"
-              class="rounded-full border border-primary/30 px-4 py-2 text-xs uppercase tracking-[0.2em] text-primary transition-colors hover:bg-tertiary hover:text-secondary"
+              class="px-4 py-2 text-xs uppercase text-secondary bg-primary transition-colors hover:bg-tertiary hover:text-secondary hover:border-tertiary"
               @click="toggleBioEdit"
             >
               {{ isEditingBio ? 'Annulla' : 'Modifica' }}
@@ -46,32 +45,32 @@
               v-model="editData.bio_heading"
               rows="4"
               maxlength="240"
-              class="w-full resize-none border border-primary/30 bg-secondary px-4 py-3 text-lg uppercase leading-relaxed text-primary placeholder-primary/40 focus:outline-none focus:ring-2 focus:ring-tertiary"
-              placeholder="Scrivi la tua biografia in uppercase"
+              class="w-full resize-none border border-primary bg-secondary px-4 py-3 text-primary leading-relaxed placeholder-primary/40 focus:border-tertiary"
+              placeholder="Scrivi la tua biografia"
             />
             <div class="flex items-center gap-3">
               <button
                 type="button"
-                class="rounded-full bg-tertiary px-5 py-2 text-sm font-bold uppercase tracking-[0.2em] text-secondary transition-opacity hover:opacity-90"
+                class="bg-primary px-5 py-2 text-xs font-bold text-secondary transition-opacity hover:bg-tertiary"
                 @click="saveProfile"
               >
                 Salva bio
               </button>
-              <p class="text-xs uppercase tracking-[0.2em] text-primary/50">Max 240 caratteri</p>
+              <p class="text-xs text-primary/50">Max 240 caratteri</p>
             </div>
           </div>
 
-          <p v-else class="text-[clamp(1.2rem,2.4vw,2.6rem)] uppercase leading-[1.1] text-primary">
+          <p v-else class="leading-[1.1] text-primary">
             {{ bioHeading }}
           </p>
         </div>
 
-        <div class="relative border border-primary/20 bg-secondary p-6 lg:min-h-[60vh] lg:border-r-0 lg:border-y-0 lg:border-l">
-          <h2 class="mb-6 text-center font-sans text-3xl font-bold uppercase tracking-[0.15em] text-primary">Your Spotlights</h2>
+        <div class="relative bg-secondary lg:min-h-[60vh] ml-6 mr-6">
+          <h3 class="text-center uppercase text-primary">Your Spotlights</h3>
 
           <button
             type="button"
-            class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-primary/30 bg-secondary/90 p-2 text-primary transition-colors hover:bg-tertiary hover:text-secondary disabled:cursor-not-allowed disabled:opacity-35"
+            class="absolute left-2 top-1/2 z-10 -translate-y-1/2 bg-primary p-2 text-primary transition-colors hover:bg-tertiary hover:text-secondary disabled:cursor-not-allowed disabled:text-secondary disabled:bg-primary/50"
             :disabled="!canPrevSpotlights"
             aria-label="Spotlights precedenti"
             @click="goPrevSpotlights"
@@ -83,7 +82,7 @@
 
           <button
             type="button"
-            class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-primary/30 bg-secondary/90 p-2 text-primary transition-colors hover:bg-tertiary hover:text-secondary disabled:cursor-not-allowed disabled:opacity-35"
+            class="absolute right-2 top-1/2 z-10 -translate-y-1/2 bg-primary p-2 text-primary transition-colors hover:bg-tertiary hover:text-secondary disabled:cursor-not-allowed disabled:text-secondary disabled:bg-primary/50"
             :disabled="!canNextSpotlights"
             aria-label="Spotlights successivi"
             @click="goNextSpotlights"
@@ -104,14 +103,14 @@
                 <div class="aspect-[4/3] w-full overflow-hidden bg-primary/10">
                   <img :src="item.cover_url" :alt="item.title" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]">
                 </div>
-                <p class="truncate border-t border-primary/20 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                <p class="truncate px-3 py-2 text-xs font-semibold uppercase text-primary">
                   {{ item.title }}
                 </p>
               </router-link>
             </div>
           </Transition>
 
-          <p v-if="spotlights.length === 0" class="mt-6 text-center text-sm uppercase tracking-[0.18em] text-primary/60">
+          <p v-if="spotlights.length === 0" class="mt-6 text-center text-sm text-primary/60">
             Nessun designer preferito ancora.
           </p>
         </div>
@@ -123,7 +122,7 @@
         <h2 class="font-sans text-3xl font-bold text-primary">Profilo non trovato</h2>
         <router-link
           to="/"
-          class="mt-5 inline-block border border-primary/40 px-6 py-3 text-xs uppercase tracking-[0.2em] text-primary transition-colors hover:bg-tertiary hover:text-secondary"
+          class="mt-5 inline-block border border-primary/40 px-6 py-3 text-xs uppercase text-primary transition-colors hover:bg-tertiary hover:text-secondary"
         >
           Torna alla home
         </router-link>
@@ -187,7 +186,7 @@ const heroNameStyle = computed(() => {
     fontSize: `${fontSize}vw`,
     lineHeight: '0.85',
     color: '#f1f1f1',
-    textShadow: '0 6px 0 rgba(0, 0, 0, 0.98), 0 0 28px rgba(0, 0, 0, 0.9)',
+    textShadow: '1px 3px 20px rgba(0, 0, 0, 0.38)',
     width: '100vw',
   }
 })
@@ -345,7 +344,7 @@ watch(() => authStore.profile, async (newProfile) => {
 <style scoped>
 .hero-title {
   font-family: "Suisse Int'l Mono", monospace;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.03em;
   text-align: center;
   white-space: nowrap;

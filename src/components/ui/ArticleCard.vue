@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="`${toBase}/${article.id}`"
-    class="group relative block overflow-hidden rounded-none no-underline text-inherit transition-transform duration-150 ease-out hover:-translate-y-0.5"
+    class="group relative block overflow-hidden no-underline text-inherit transition-transform duration-150 ease-out hover:-translate-y-0.5"
     style="width: 25vw; height: 35vw;"
   >
     <div class="absolute inset-0 bg-secondary/20">
@@ -24,10 +24,10 @@
     <button
       type="button"
       :class="[
-        'absolute bottom-3 left-1/2 z-30 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border text-secondary transition-colors duration-150 disabled:opacity-60',
+        'absolute bottom-3 left-1/2 z-30 flex h-10 w-10  items-center justify-center text-secondary drop-shadow-md',
         isFavorite
-          ? 'border-tertiary bg-tertiary hover:bg-tertiary/90'
-          : 'border-primary/70 bg-primary hover:bg-primary/90'
+          ? 'bg-tertiary hover:bg-tertiary/70'
+          : 'bg-primary hover:bg-tertiary',
       ]"
       :aria-label="isFavorite ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'"
       @click.stop.prevent="toggleFavorite"

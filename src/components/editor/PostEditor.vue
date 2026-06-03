@@ -1,18 +1,16 @@
 <template>
-  <div class="space-y-4">
+  <div>
     <input
       v-model="localTitle"
       type="text"
-      placeholder="Titolo articolo"
-      class="w-full text-4xl font-sans font-bold text-secondary bg-transparent placeholder-secondary/40 focus:outline-none"
+      placeholder="Scrivi il titolo qui..."
+      class="w-full text-xl py-6 mb-4 px-4 font-bold text-primary placeholder-primary/30 focus:outline-none bg-primary/10"
       @input="emitTitle"
     />
 
-    <div class="h-1 bg-gradient-to-r from-tertiary to-transparent" />
-
     <div
       ref="holder"
-      class="min-h-[28rem] rounded-lg border border-secondary/20 bg-primary px-4 py-4 text-secondary"
+      class="h-[60vh] bg-primary/10 px-4 py-4 text-primary h-[60vh] overflow-y-auto"
     />
   </div>
 </template>
@@ -71,7 +69,7 @@ const extractPlainText = (data) => {
     .trim()
 }
 
-const holder = ref(null)
+const holder = ref(props.content || '')
 const localTitle = ref(props.title || '')
 const currentData = ref(normalizeEditorContent(props.modelValue))
 let editor = null
@@ -164,3 +162,24 @@ defineExpose({
   getText,
 })
 </script>
+
+<style scoped>
+:deep(.ce-paragraph) {
+  color: var(--primary);
+}
+
+:deep(.ce-paragraph[data-placeholder]::before) {
+  color: #a9a9a9;
+}
+
+:deep(.ce-toolbar__settings-btn) {
+  /* Esempio: cambia il colore dell'icona a rosso */
+  color: #ffffff;
+}
+
+:deep(.ce-toolbar__settings-btn:hover) {
+  /* Esempio: cambia il colore dell'icona al passaggio del mouse */
+  background-color: #f0f0f0;
+  color: #000000;
+}
+</style>

@@ -1,5 +1,11 @@
 <template>
-  <div class="min-h-screen bg-primary lg:h-screen lg:overflow-hidden">
+  <div class="min-h-screen bg-secondary px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mx-auto w-full max-w-[90vw]">
+          <div class="pb-4">
+            <p class="text-s uppercase text-primary/50">Title and image required</p>
+            <h1 class="text-primary uppercase">New Post</h1>
+        </div>
+  <div class=" min-h-screen bg-secondary lg:overflow-hidden">
     <div class="flex min-h-screen flex-col lg:h-screen lg:flex-row">
       <PostImageManager
         v-model:images="images"
@@ -8,36 +14,19 @@
         @error="handleImageError"
       />
 
-      <section class="flex min-h-0 flex-1 flex-col bg-primary lg:w-1/2">
-        <div class="shrink-0 border-b border-secondary/20 px-6 py-5">
-          <p class="text-sm uppercase tracking-[0.3em] text-secondary">Admin / Modifica post</p>
-          <h1 class="mt-3 font-sans text-4xl font-bold text-secondary">Modifica post</h1>
-        </div>
-
-        <div v-if="loading" class="flex-1 px-4 py-4 sm:px-6">
-          <div class="rounded-2xl border border-secondary/20 bg-primary p-8 text-secondary/70">
-            Caricamento post...
-          </div>
-        </div>
-
-        <div v-else-if="loadError" class="flex-1 px-4 py-4 sm:px-6">
-          <div class="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-700">
-            {{ loadError }}
-          </div>
-        </div>
-
-        <div v-else class="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
-          <div class="rounded-2xl border border-secondary/20 bg-primary p-5 shadow-sm sm:p-8">
+      <section class="flex lg:w-[60%]">
+        <div class="w-[100%]">
+          <div class="bg-secondary">
             <PostEditor
               ref="editorRef"
               v-model:title="title"
               v-model="content"
             />
 
-            <div class="mt-6 flex flex-col gap-3 border-t border-secondary/20 pt-6 sm:flex-row">
+            <div class="mt-4 flex flex-col gap-4 sm:flex-row">
               <button
                 type="button"
-                class="flex-1 rounded-lg border border-secondary/20 bg-primary px-6 py-3 font-medium text-secondary transition-colors hover:bg-secondary/5 disabled:cursor-not-allowed disabled:opacity-50"
+                class="flex-1  border border-primary px-4 py-2 font-s text-primary transition-colors hover:border-tertiary disabled:cursor-not-allowed disabled:opacity-50"
                 :disabled="isSaving"
                 @click="savePost('draft')"
               >
@@ -45,7 +34,7 @@
               </button>
               <button
                 type="button"
-                class="flex-1 rounded-lg bg-tertiary px-6 py-3 font-medium text-secondary transition-colors hover:bg-tertiary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                class="flex-1 bg-tertiary px-4 py-2 font-s text-secondary transition-colors hover:bg-tertiary/70 disabled:cursor-not-allowed disabled:bg-grey-500"
                 :disabled="isSaving"
                 @click="savePost('published')"
               >
@@ -59,7 +48,7 @@
           </div>
         </div>
       </section>
-    </div>
+    </div></div></div>
   </div>
 </template>
 

@@ -20,11 +20,11 @@
             <img :src="slide.src" :alt="slide.alt" class="h-full w-full object-cover" />
           </div>
 
-          <div class="absolute inset-x-0 bottom-0 flex h-[100px] items-center bg-primary px-4 backdrop-blur-sm sm:px-6">
+          <div class="absolute inset-x-0 bottom-0 flex h-[100px] items-center bg-secondary px-4 backdrop-blur-sm sm:px-6">
             <div class="flex w-full items-center justify-between gap-4 text-secondary">
               <button
                 type="button"
-                class="flex h-11 w-11 items-center justify-center rounded-full border border-secondary/20 bg-primary text-secondary transition-colors hover:bg-secondary/5"
+                class="flex h-11 w-11 items-center justify-center text-primary transition-colors hover:bg-tertiary hover:text-secondary"
                 :disabled="slides.length < 2"
                 aria-label="Immagine precedente"
                 @click="prevSlide"
@@ -32,13 +32,13 @@
                 ←
               </button>
 
-              <div class="min-w-[6rem] text-center font-mono text-lg tracking-[0.2em] text-secondary">
+              <div class="min-w-[6rem] text-center font-mono text-lg tracking-[0.2em] text-primary">
                 {{ activeSlideIndex + 1 }}/{{ slides.length }}
               </div>
 
               <button
                 type="button"
-                class="flex h-11 w-11 items-center justify-center rounded-full border border-secondary/20 bg-primary text-secondary transition-colors hover:bg-secondary/5"
+                class="flex h-11 w-11 items-center justify-center text-primary transition-colors hover:bg-tertiary hover:text-secondary"
                 :disabled="slides.length < 2"
                 aria-label="Immagine successiva"
                 @click="nextSlide"
@@ -54,19 +54,19 @@
         </div>
       </aside>
 
-      <article class="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
-        <div class="mx-auto w-full max-w-3xl">
+      <article class="min-h-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+        <div class="w-full">
           <template v-if="post">
             <p class="mb-4 text-sm uppercase tracking-[0.3em] text-tertiary">Blog</p>
             <h1 class="text-primary sm:text-5xl">{{ post.title }}</h1>
             <p class="mt-4 text-sm text-primary/70">{{ formatDate(post.createdAt) }}</p>
 
-            <div class="prose prose-neutral mt-10 max-w-none prose-headings:font-sans prose-headings:bg-secondary prose-p:text-primary/90 prose-li:text-primary/90 prose-blockquote:border-tertiary prose-blockquote:text-primary/80">
-              <div v-html="renderedContent" />
-            </div>
+      <div class="prose prose-neutral mt-10 text-primary h-[58vh] overflow-y-auto pr-2">
+        <div v-html="renderedContent" />
+      </div>
           </template>
 
-          <div v-else-if="!loading && !errorMessage" class="rounded-2xl border border-secondary/20 bg-primary p-8 text-primary/70">
+          <div v-else-if="!loading && !errorMessage" class="rounded-2xl border border-secondary/20 bg-secondary p-8 text-primary">
             Post non trovato.
           </div>
         </div>

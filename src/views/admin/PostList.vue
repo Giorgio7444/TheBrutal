@@ -1,20 +1,20 @@
 <template>
-  <div class="min-h-screen bg-primary px-4 py-10 sm:px-6 lg:px-8">
-    <div class="mx-auto w-full max-w-6xl">
+  <div class="min-h-screen bg-secondary px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mx-auto w-full max-w-[90vw]">
       <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p class="text-sm uppercase tracking-[0.3em] text-secondary">Admin / Post</p>
-          <h1 class="font-sans text-4xl font-bold text-secondary">Tutti i post</h1>
+          <p class="text-s uppercase text-primary/50">Admin/Post</p>
+          <h1 class="text-primary uppercase">Tutti i post</h1>
         </div>
         <router-link
           to="/admin/new-post"
-          class="inline-flex items-center justify-center rounded-lg bg-tertiary px-5 py-3 font-medium text-secondary transition-colors hover:bg-tertiary/90"
+          class="inline-flex items-center justify-center bg-primary px-4 py-2 font-xs text-secondary transition-colors hover:bg-tertiary"
         >
           Nuovo post
         </router-link>
       </div>
 
-      <div v-if="loading" class="rounded-2xl border border-secondary/20 bg-primary p-8 text-secondary/70">
+      <div v-if="loading" class="p-8 text-primary">
         Caricamento post...
       </div>
 
@@ -22,43 +22,43 @@
         {{ errorMessage }}
       </div>
 
-      <div v-else class="overflow-hidden rounded-2xl border border-secondary/20 bg-primary">
-        <table class="min-w-full divide-y divide-secondary/20">
-          <thead class="bg-secondary/5">
+      <div v-else class="min-w-[90vw] overflow-hidden border border-secondary/20 bg-secondary mt-20">
+        <table class="min-w-full divide-y divide-primary">
+          <thead class="bg-secondary">
             <tr>
-              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.2em] text-secondary/70">Titolo</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.2em] text-secondary/70">Stato</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.2em] text-secondary/70">Data</th>
-              <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-[0.2em] text-secondary/70">Azioni</th>
+              <th class="px-4 py-2 text-left text-s font-bold text-primary">Title</th>
+              <th class="px-4 py-2 text-left text-s font-bold text-primary">Status</th>
+              <th class="px-4 py-2 text-left text-s font-bold text-primary">Date</th>
+              <th class="px-4 py-2 text-right text-s font-bold text-primary">Actions</th>
             </tr>
-          </thead>
-          <tbody class="divide-y divide-secondary/20">
-            <tr v-for="post in posts" :key="post.id" class="align-top">
-              <td class="px-6 py-5">
-                <div class="font-medium text-secondary">{{ post.title }}</div>
+          </thead>  
+          <tbody class="divide-y divide-primary/20">
+            <tr v-for="post in posts" :key="post.id">
+              <td class="min-w-[10vw] px-4 py-2 text-sm text-primary">
+                <div class="text-primary font-bold uppercase">{{ post.title }}</div>
               </td>
-              <td class="px-6 py-5">
+              <td class="px-4 py-2 text-sm text-primary">
                 <span
-                  class="inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]"
-                  :class="post.status === 'published' ? 'bg-tertiary/20 text-secondary' : 'bg-secondary/20 text-secondary'"
+                  class="inline-flex px-2 py-1 text-xs font-bold uppercase"
+                  :class="post.status === 'published' ? 'bg-tertiary w-full justify-center text-secondary' : 'bg-primary w-full justify-center text-secondary'"
                 >
                   {{ post.status }}
                 </span>
               </td>
-              <td class="px-6 py-5 text-sm text-secondary/70">
+              <td class="px-4 py-2 text-sm text-primary">
                 {{ formatDate(post.createdAt) }}
               </td>
-              <td class="px-6 py-5">
+              <td class="px-4 py-2">
                 <div class="flex justify-end gap-3">
                   <router-link
                     :to="`/admin/edit-post/${post.id}`"
-                    class="rounded-lg border border-secondary/20 px-4 py-2 text-sm font-medium text-secondary transition-colors hover:bg-secondary/5"
+                    class="border border-primary px-4 py-2 text-sm text-primary transition-colors hover:bg-tertiary hover:text-secondary hover:border-tertiary"
                   >
                     Modifica
                   </router-link>
                   <button
                     type="button"
-                    class="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100"
+                    class="bg-red-600 px-4 py-2 text-sm text-primary transition-colors hover:bg-red-700"
                     @click="deletePost(post.id)"
                   >
                     Elimina
@@ -68,7 +68,7 @@
             </tr>
 
             <tr v-if="posts.length === 0">
-              <td colspan="4" class="px-6 py-10 text-center text-secondary/70">
+              <td colspan="4" class="px-6 py-10 text-center text-primary">
                 Nessun post trovato.
               </td>
             </tr>
