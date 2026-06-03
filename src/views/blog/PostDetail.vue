@@ -54,15 +54,14 @@
         </div>
       </aside>
 
-      <article class="min-h-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+      <article class="min-h-0 w-full px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
         <div class="w-full">
           <template v-if="post">
-            <p class="mb-4 text-sm uppercase tracking-[0.3em] text-tertiary">Blog</p>
-            <h1 class="text-primary sm:text-5xl">{{ post.title }}</h1>
-            <p class="mt-4 text-sm text-primary/70">{{ formatDate(post.createdAt) }}</p>
+            <h1 class="flex text-primary w-full sm:text-5xl">{{ post.title }}</h1>
+            <p class="flex mb-[8vh] text-sm w-full text-primary/70">{{ formatDate(post.createdAt) }}</p>
 
-      <div class="prose prose-neutral mt-10 text-primary h-[58vh] overflow-y-auto pr-2">
-        <div v-html="renderedContent" />
+      <div class="w-full mt-4 text-primary h-[61vh] pr-[5vw] overflow-y-auto pr-2">
+        <div v-html="renderedContent" class="w-full" />
       </div>
           </template>
 
