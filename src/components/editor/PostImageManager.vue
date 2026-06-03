@@ -1,7 +1,7 @@
 <template>
   <section class="flex h-full min-h-0 flex-col bg-secondary">
     <div class="min-h-0 flex-1 overflow-y-auto pr-4 sm:pr-4">
-      <div v-if="!images.length" class="flex h-full h-[60vh] mb-4 items-center justify-center bg-primary/10 px-6 text-center text-primary/80">
+      <div v-if="!images.length" class="flex h-[60vh] mb-4 items-center justify-center bg-primary/10 px-6 text-center text-primary/80">
         Add one or more images to build the post gallery.
       </div>
 
