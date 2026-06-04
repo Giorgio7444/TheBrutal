@@ -120,7 +120,7 @@ const routes = [
   {
     path: '/blog',
     name: 'Blog',
-    component: () => import('@/views/blog/PostList.vue'),
+    component: () => import('@/views/admin/PostList.vue'),
     meta: { title: 'Blog — Italian Spotlight' },
   },
   {
