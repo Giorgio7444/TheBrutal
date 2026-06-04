@@ -1,13 +1,19 @@
 <template>
-  <div class="bg-secondary text-primary flex flex-col items-center">
+  <div class="mx-auto w-full max-w-[90vw] pt-8">
+    <div class="pb-8">
+        <h1 class="flex items-center justify-center text-center text-primary uppercase">Designers</h1>
+        <p class="flex items-center justify-center text-center text-s uppercase text-primary/50">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
 
+    </div>
+  </div>
+  <div class="bg-secondary text-primary flex flex-col items-center">
     <div class="w-full py-8 overflow-hidden">
-      <div class="max-w-4xl mx-auto mb-6">
+      <div class="max-w-4xl mx-auto mb-16">
         <input
           v-model="search"
           type="search"
           placeholder="Cerca per titolo o contenuto..."
-          class="w-full px-4 py-3 bg-secondary border border-primary/30 text-primary placeholder-primary/60 focus:outline-none focus:ring-2 focus:ring-tertiary"
+          class="w-full px-4 py-2 bg-secondary border border-primary/30 text-primary placeholder-primary/60 focus:outline-none focus:ring-2 focus:ring-tertiary"
         />
       </div>
 

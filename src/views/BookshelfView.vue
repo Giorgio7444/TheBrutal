@@ -1,5 +1,13 @@
 <template>
-  <main class="min-h-screen bg-secondary text-primary pt-24 pb-16">
+    <div class="mx-auto w-full max-w-[90vw] pt-8">
+    <div class="pb-4">
+        <h1 class="flex items-center justify-center text-center text-primary uppercase">Bookshelf</h1>
+        <p class="flex items-center justify-center text-center text-s uppercase text-primary/50">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+
+    </div>
+  </div>
+  
+  <main class="min-h-screen bg-secondary text-primary pt-12 pb-16">
     <div class="mx-auto w-[90vw]">
       <div class="grid grid-cols-4 gap-4">
         <BookLink
