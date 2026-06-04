@@ -6,18 +6,13 @@
       rel="noopener noreferrer"
       class="book-link group block"
     >
-      <div class="book-frame">
-        <!-- COPERTINA: decommenta e compila src quando hai l'immagine -->
-        <!-- <img :src="cover" :alt="title" class="book-cover-img" /> -->
-
-        <!-- Placeholder: rimuovilo quando inserisci l'img sopra -->
-        <div class="book-cover-placeholder">
-          <span class="book-index">{{ String(index + 1).padStart(2, '0') }}</span>
-        </div>
-
-        <!-- Overlay giallo al hover -->
-        <div class="book-hover-overlay" />
+    <div class="book-frame">
+      <img v-if="cover" :src="cover" :alt="title" class="book-cover-img" />
+      <div v-else class="book-cover-placeholder">
+        <span class="book-index">{{ String(index + 1).padStart(2, '0') }}</span>
       </div>
+      <div class="book-hover-overlay" />
+    </div>
     </a>
 
     <p class="book-title">{{ title }}</p>
@@ -29,7 +24,7 @@ defineProps({
   title: { type: String, required: true },
   url:   { type: String, required: true },
   index: { type: Number, required: true },
-  // cover: { type: String, default: '' }, // ← decommenta quando usi le immagini
+  cover: { type: String, default: '' },
 })
 </script>
 

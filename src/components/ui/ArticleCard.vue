@@ -16,7 +16,7 @@
     <div class="absolute inset-0 bg-tertiary opacity-0 mix-blend-multiply transition-opacity duration-150 ease-out group-hover:opacity-100" />
 
     <h3
-      class="absolute uppercase inset-0 z-20 flex items-start justify-center px-[2vw] pt-[3%] text-center font-bold text-secondary leading-none"
+      class="text-[1.8vw] absolute uppercase inset-0 z-20 flex items-start justify-center px-[2vw] pt-[3%] text-center text-primary text-shadow-black"
     >
       {{ article.title }}
     </h3>

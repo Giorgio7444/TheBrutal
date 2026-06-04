@@ -2,7 +2,7 @@
   <div class="mx-auto w-full max-w-[90vw] pt-8">
     <div class="pb-8">
         <h1 class="flex items-center justify-center text-center text-primary uppercase">Designers</h1>
-        <p class="flex items-center justify-center text-center text-s uppercase text-primary/50">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+        <p class="flex items-center justify-center text-center text-s uppercase text-primary/50">Quei designer che hanno reso l'Italia la patria del graphic design</p>
 
     </div>
   </div>

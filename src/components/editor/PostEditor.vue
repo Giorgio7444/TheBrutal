@@ -69,7 +69,7 @@ const extractPlainText = (data) => {
     .trim()
 }
 
-const holder = ref(props.content || '')
+const holder = ref(null)
 const localTitle = ref(props.title || '')
 const currentData = ref(normalizeEditorContent(props.modelValue))
 let editor = null
@@ -112,13 +112,9 @@ watch(
   async (value) => {
     const normalized = normalizeEditorContent(value)
     const serialized = serializeContent(normalized)
-
     if (serialized === lastSerialized) return
-
     currentData.value = normalized
-    displayCoverUrl.value = normalized.cover || displayCoverUrl.value || ''
     lastSerialized = serialized
-
     if (editor) {
       await editor.render(normalized)
     }
@@ -127,8 +123,8 @@ watch(
 
 onMounted(async () => {
   editor = new EditorJS({
-    holder: holder.value,
-    data: currentData.value,
+    holder: holder.value,    
+    data: currentData.value,     
     autofocus: true,
     placeholder: 'Scrivi il contenuto qui...',
     tools: {
