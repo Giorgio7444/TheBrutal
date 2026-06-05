@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-[93.3vh] bg-secondary text-primary flex items-center justify-center opacity-100">
+  <div class="relative h-[92vh] bg-secondary text-primary flex items-center justify-center opacity-100">
       <div class="absolute h-[87svh] top-[-1px] opacity-100">
         <img :src="bgGif" class="h-full w-auto max-w-none object-contain object-center">
       </div>
