@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-secondary lg:overflow-hidden">
     <div class="flex h-screen flex-col lg:h-[calc(100dvh-4.5rem)] lg:flex-row lg:items-start">
-      <aside class="relative h-[93vh] overflow-hidden border-b border-secondary/20 bg-secondary/5 lg:h-[93vh] lg:w-[40vw] lg:shrink-0 lg:border-b-0 lg:border-r">
+      <aside class="relative h-[45vh] overflow-hidden border-b border-secondary/20 bg-secondary/5 lg:h-[93vh] lg:w-[40vw] lg:shrink-0 lg:border-b-0 lg:border-r">
         <div v-if="loading" class="flex h-full items-center justify-center px-6 text-center text-primary/70">
           Caricamento post...
         </div>
@@ -54,15 +54,15 @@
         </div>
       </aside>
 
-      <article class="min-h-0 w-full px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
-        <div class="w-full">
+      <article class="flex flex-col min-h-0 w-full px-4 py-6 sm:px-6 lg:px-10 lg:py-10 h-[55vh] lg:h-auto lg:block">
+        <div class="w-full flex flex-col min-h-0 flex-1 lg:block">
           <template v-if="post">
-            <h1 class="flex text-primary w-full sm:text-5xl">{{ post.title }}</h1>
-            <p class="flex mb-[8vh] text-sm w-full text-primary/70">{{ formatDate(post.createdAt) }}</p>
+            <h1 class="flex text-primary w-full sm:text-5xl shrink-0">{{ post.title }}</h1>
+            <p class="flex mb-4 text-sm w-full text-primary/70 shrink-0">{{ formatDate(post.createdAt) }}</p>
 
-      <div class="w-full mt-4 text-primary h-[61vh] pr-[5vw] overflow-y-auto pr-2">
-        <div v-html="renderedContent" class="w-full" />
-      </div>
+            <div class="w-full mt-16 text-primary flex-1 min-h-0 overflow-y-auto pr-2 lg:h-[51vh] lg:flex-none">
+              <div v-html="renderedContent" class="w-full" />
+            </div>
           </template>
 
           <div v-else-if="!loading && !errorMessage" class="rounded-2xl border border-secondary/20 bg-secondary p-8 text-primary">

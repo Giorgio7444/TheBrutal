@@ -20,8 +20,7 @@
         </label>
 
         <div class="relative z-10 flex h-full items-top justify-top pt-4">
-          <h1 class="hero-title uppercase" :style="heroNameStyle">
-            {{ displayName }}
+          <h1 class="hero-title uppercase" :style="heroNameStyle" v-html="heroDisplayName">
           </h1>
         </div>
       </section>
@@ -93,7 +92,7 @@
           </button>
 
           <Transition name="spotlight-page" mode="out-in">
-            <div :key="spotlightPage" class="grid grid-cols-2 gap-4 px-9">
+            <div :key="spotlightPage" class="grid grid-cols-2 gap-4 px-9" style="min-height: 260px;">
               <router-link
                 v-for="item in visibleSpotlights"
                 :key="item.uid"
@@ -132,7 +131,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { collection, doc, getDoc } from 'firebase/firestore'
 import { useAuthStore } from '@/stores/auth'
@@ -178,17 +177,65 @@ const heroBackgroundStyle = computed(() => {
   }
 })
 
-const heroNameStyle = computed(() => {
-  const len = Math.max(displayName.value.length, 6)
-  const fontSize = Math.max(3.2, Math.min(16, 100 / (len * 0.58)))
+const isMobile = ref(window.innerWidth < 768)
+const heroFontSize = ref(10) // vw, will be computed
 
-  return {
-    fontSize: `${fontSize}vw`,
-    lineHeight: '0.85',
-    color: '#f1f1f1',
-    textShadow: '1px 3px 20px rgba(0, 0, 0, 0.38)',
-    width: '100vw',
+// Misura la larghezza di un testo a una data dimensione font usando canvas
+const measureTextWidth = (text, fontSizeVw) => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  const fontSizePx = (fontSizeVw / 100) * window.innerWidth
+  ctx.font = `500 ${fontSizePx}px "Suisse Int'l Mono", monospace`
+  return ctx.measureText(text).width
+}
+
+// Calcola il fontSize vw affinché la stringa più larga occupi esattamente 100vw
+const computeHeroFontSize = () => {
+  const name = displayName.value
+  if (!name) return
+
+  // Su mobile ogni parola è su riga propria → la parola più lunga deve coprire 100vw
+  // Su desktop il nome intero è su una riga → l'intera stringa deve coprire 100vw
+  const tokens = isMobile.value ? name.split(' ') : [name]
+  const longestToken = tokens.reduce((a, b) =>
+    measureTextWidth(b, 10) > measureTextWidth(a, 10) ? b : a
+  , tokens[0])
+
+  // Larghezza in px della parola più lunga a 10vw
+  const widthAt10vw = measureTextWidth(longestToken, 10)
+  // Proporzione: vogliamo che occupi 100vw
+  const targetPx = window.innerWidth
+  const newSize = (targetPx / widthAt10vw) * 10
+
+  // Clamp ragionevole
+  heroFontSize.value = Math.max(3, Math.min(40, newSize))
+}
+
+const heroNameStyle = computed(() => ({
+  fontSize: `${heroFontSize.value}vw`,
+  lineHeight: '0.85',
+  color: '#f1f1f1',
+  textShadow: '1px 3px 20px rgba(0, 0, 0, 0.38)',
+  width: '100vw',
+}))
+
+const heroDisplayName = computed(() => {
+  if (isMobile.value) {
+    return displayName.value.split(' ').join('<br>')
   }
+  return displayName.value
+})
+
+const onResize = () => {
+  const wasMobile = isMobile.value
+  isMobile.value = window.innerWidth < 768
+  // Ricalcola sempre al resize, ma se cambia breakpoint lo fa subito
+  computeHeroFontSize()
+}
+
+// Ricalcola quando cambia il nome o il breakpoint
+watch([displayName, isMobile], () => {
+  computeHeroFontSize()
 })
 
 const spotlightPages = computed(() => {
@@ -325,6 +372,8 @@ const loadProfile = async () => {
 
 onMounted(async () => {
   await loadProfile()
+  computeHeroFontSize()
+  window.addEventListener('resize', onResize)
 })
 
 watch(() => route.params.username, async () => {
@@ -339,6 +388,10 @@ watch(() => authStore.profile, async (newProfile) => {
   profile.value = newProfile
   await loadSpotlights()
 })
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize)
+})
 </script>
 
 <style scoped>
@@ -347,7 +400,6 @@ watch(() => authStore.profile, async (newProfile) => {
   font-weight: 500;
   letter-spacing: -0.03em;
   text-align: center;
-  white-space: nowrap;
 }
 
 .spotlight-page-enter-active,

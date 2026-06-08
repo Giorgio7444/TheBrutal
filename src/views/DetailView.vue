@@ -7,8 +7,12 @@
       </div>
     </div>
 
-    <div v-else-if="article" class="min-h-screen">
-      <section class="fixed left-0 top-0 h-screen w-[50vw] overflow-hidden bg-black" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+<div v-else-if="article" class="flex flex-col md:block" style="height: 100dvh; overflow: hidden;">
+        <section
+        class="md:fixed md:left-0 md:top-0 md:h-screen md:w-[50vw] w-full shrink-0 overflow-hidden bg-black"
+        style="height: 45dvh; min-height: 200px;"
+        @mouseenter="isHovered = true" @mouseleave="isHovered = false"
+      >
         <div class="relative h-full w-full">
           <div v-if="articleImages.length > 0" class="relative h-full w-full">
             <Transition name="slide-fade" mode="out-in">
@@ -83,8 +87,7 @@
         </div>
       </section>
 
-      <article class="ml-[50vw] min-h-screen w-[50vw] bg-secondary text-primary px-8 py-20 lg:px-12">
-        <div class="mx-auto max-w-3xl">
+<article class="md:ml-[50vw] md:min-h-screen md:w-[50vw] w-full bg-secondary text-primary px-8 py-6 lg:py-20 lg:px-12 flex-1 md:overflow-y-auto max-h-[60vh] overflow-y-auto md:max-h-none md:min-h-screen">        <div class="mx-auto max-w-3xl">
           <div class="mb-12">
             <div class="flex flex-wrap gap-2 mb-6">
               <TagBadge
@@ -111,7 +114,7 @@
               </button>
             </div>
 
-            <div class="flex items-center gap-4 pb-6 border-b border-primary/20">
+            <div class="lex items-center gap-4 pb-6 border-b border-primary/20">
               <UserAvatar
                 :avatar-url="authorAvatarUrl"
                 :username="authorName"

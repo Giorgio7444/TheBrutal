@@ -22,8 +22,9 @@
         {{ errorMessage }}
       </div>
 
-      <div v-else class="min-w-[90vw] overflow-hidden border border-secondary/20 bg-secondary mt-20">
-        <table class="min-w-full divide-y divide-primary">
+      <div v-else class="min-w-full overflow-hidden border border-secondary/20 bg-secondary mt-20">
+        <!-- Desktop table -->
+        <table class="hidden md:table min-w-full divide-y divide-primary">
           <thead class="bg-secondary">
             <tr>
               <th class="px-4 py-2 text-left text-s font-bold text-primary">Title</th>
@@ -31,7 +32,7 @@
               <th class="px-4 py-2 text-left text-s font-bold text-primary">Date</th>
               <th class="px-4 py-2 text-right text-s font-bold text-primary">Actions</th>
             </tr>
-          </thead>  
+          </thead>
           <tbody class="divide-y divide-primary/20">
             <tr v-for="post in posts" :key="post.id">
               <td class="min-w-[10vw] px-4 py-2 text-sm text-primary">
@@ -66,7 +67,6 @@
                 </div>
               </td>
             </tr>
-
             <tr v-if="posts.length === 0">
               <td colspan="4" class="px-6 py-10 text-center text-primary">
                 Nessun post trovato.
@@ -74,6 +74,42 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Mobile list -->
+        <div class="md:hidden divide-y divide-primary/20">
+          <div v-for="post in posts" :key="post.id" class="px-4 py-3">
+            <div class="mb-2">
+              <div class="text-primary font-bold uppercase text-sm">{{ post.title }}</div>
+              <div class="flex items-center gap-3 mt-1">
+                <span
+                  class="inline-flex px-2 py-1 text-xs font-bold uppercase"
+                  :class="post.status === 'published' ? 'bg-tertiary text-secondary' : 'bg-primary text-secondary'"
+                >
+                  {{ post.status }}
+                </span>
+                <span class="text-xs text-primary/60">{{ formatDate(post.createdAt) }}</span>
+              </div>
+            </div>
+            <div class="flex gap-2 w-full">
+              <router-link
+                :to="`/admin/edit-post/${post.id}`"
+                class="flex-1 text-center border border-primary px-4 py-2 text-sm text-primary transition-colors hover:bg-tertiary hover:text-secondary hover:border-tertiary"
+              >
+                Modifica
+              </router-link>
+              <button
+                type="button"
+                class="flex-1 bg-red-600 px-4 py-2 text-sm text-primary transition-colors hover:bg-red-700"
+                @click="deletePost(post.id)"
+              >
+                Elimina
+              </button>
+            </div>
+          </div>
+          <div v-if="posts.length === 0" class="px-6 py-10 text-center text-primary">
+            Nessun post trovato.
+          </div>
+        </div>
       </div>
     </div>
   </div>

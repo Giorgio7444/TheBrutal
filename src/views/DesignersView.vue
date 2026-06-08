@@ -33,9 +33,9 @@
       <div
         v-else
         class="grid gap-0 w-full max-w-[100vw] mb-[5vh]"
-        :style="{ gridTemplateColumns: 'repeat(4, 25vw)' }"
+        :style="gridStyle"
       >
-        <div v-for="post in filteredPosts" :key="post.id" class="m-0 p-0 w-[25vw]">
+        <div v-for="post in filteredPosts" :key="post.id" :style="cardStyle">
           <ArticleCard :article="post" to-base="/blog" />
         </div>
       </div>
@@ -53,6 +53,18 @@ const posts = ref([])
 const loading = ref(true)
 const error = ref(null)
 const search = ref('')
+
+const isMobile = ref(window.innerWidth < 768)
+
+const gridStyle = computed(() => ({
+  gridTemplateColumns: isMobile.value ? 'repeat(2, 50vw)' : 'repeat(4, 25vw)',
+}))
+
+const cardStyle = computed(() => ({
+  width: isMobile.value ? '50vw' : '25vw',
+  margin: 0,
+  padding: 0,
+}))
 
 const filteredPosts = computed(() => {
   const q = String(search.value || '').trim().toLowerCase()
@@ -83,5 +95,9 @@ const fetchPosts = async () => {
   }
 }
 
-onMounted(fetchPosts)
+onMounted(() => {
+  fetchPosts()
+  const onResize = () => { isMobile.value = window.innerWidth < 768 }
+  window.addEventListener('resize', onResize)
+})
 </script>

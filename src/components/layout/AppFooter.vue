@@ -9,8 +9,8 @@
               Italian Spotlight è un progetto che vuole nobilitare l'eccellenza italiana del visual design, puntando la luce sui designer che hanno reso grande il nostro paese.
             </p>
 
-            <div class="flex flex-col-2 items-start w-[100%] items-right ">
-              <div class="d:flex-row md:items-center md:justify-between items-right w-[30vw] text-right ">
+            <div class="flex flex-col-2 items-start w-full items-right">
+              <div class="flex flex-col text-right">
             <p class="text-secondary text-sm">
                 <a href="https://www.instagram.com/italian_spotlight/" 
               target="_blank" 
@@ -30,8 +30,8 @@
             </p>
           </div>
 
-          <div class="md:flex-row md:items-center md:justify-between text-right w-[20vw] ">
-            <p class="ml-6 text-secondary text-sm">
+          <div class="flex flex-col text-right ml-6">
+            <p class="text-secondary text-sm">
               <a href="https://www.instagram.com/veeswal/" 
               target="_blank" 
               rel="noopener" 

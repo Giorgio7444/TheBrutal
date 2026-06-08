@@ -2,7 +2,7 @@
   <router-link
     :to="`${toBase}/${article.id}`"
     class="group relative block overflow-hidden no-underline text-inherit transition-transform duration-150 ease-out hover:-translate-y-0.5"
-    style="width: 25vw; height: 35vw;"
+    :style="cardStyle"
   >
     <div class="absolute inset-0 bg-secondary/20">
       <img
@@ -16,7 +16,8 @@
     <div class="absolute inset-0 bg-tertiary opacity-0 mix-blend-multiply transition-opacity duration-150 ease-out group-hover:opacity-100" />
 
     <h3
-      class="text-[1.8vw] absolute uppercase inset-0 z-20 flex items-start justify-center px-[2vw] pt-[3%] text-center text-primary text-shadow-black"
+      class="absolute uppercase inset-0 z-20 flex items-start justify-center px-[2vw] pt-[3%] text-center text-primary text-shadow-black"
+      :style="titleStyle"
     >
       {{ article.title }}
     </h3>
@@ -24,11 +25,12 @@
     <button
       type="button"
       :class="[
-        'absolute bottom-3 left-1/2 z-30 flex h-10 w-10  items-center justify-center text-secondary drop-shadow-md',
+        'absolute bottom-3 z-30 flex h-10 w-10 items-center justify-center text-secondary drop-shadow-md',
         isFavorite
           ? 'bg-tertiary hover:bg-tertiary/70'
           : 'bg-primary hover:bg-tertiary',
       ]"
+      style="left: 50%; transform: translateX(-50%);"
       :aria-label="isFavorite ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'"
       @click.stop.prevent="toggleFavorite"
     >
@@ -40,7 +42,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
@@ -55,6 +57,21 @@ const props = defineProps({
     default: '/details',
   },
 })
+
+const isMobile = ref(window.innerWidth < 768)
+const onResize = () => { isMobile.value = window.innerWidth < 768 }
+onMounted(() => window.addEventListener('resize', onResize))
+onBeforeUnmount(() => window.removeEventListener('resize', onResize))
+
+const cardStyle = computed(() => isMobile.value
+  ? { width: '50vw', height: '70vw' }
+  : { width: '25vw', height: '35vw' }
+)
+
+const titleStyle = computed(() => isMobile.value
+  ? { fontSize: '3.2vw' }
+  : { fontSize: '1.8vw' }
+)
 
 const router = useRouter()
 const authStore = useAuthStore()

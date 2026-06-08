@@ -9,7 +9,7 @@
   
   <main class="min-h-screen bg-secondary text-primary pt-12 pb-16">
     <div class="mx-auto w-[90vw]">
-      <div class="grid grid-cols-4 gap-4">
+      <div class="grid gap-4 grid-cols-2 md:grid-cols-4">
       <BookLink
         v-for="(book, index) in books"
         :key="index"

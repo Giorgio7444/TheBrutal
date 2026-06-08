@@ -14,7 +14,7 @@
         @error="handleImageError"
       />
 
-      <section class="flex lg:w-[60%]">
+      <section class="flex lg:w-[60%] mt-6 lg:mt-0 pt-4 lg:pt-0 border-t border-primary/20 lg:border-t-0">
         <div class="w-[100%]">
           <div class="bg-secondary">
             <PostEditor

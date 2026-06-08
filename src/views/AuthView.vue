@@ -1,20 +1,23 @@
 <template>
-  <div class="max-h-[95vh] flex items-top justify-center px-4 py-20 bg-black">
-    <div class="max-w-screen max-h-screen">
-      <div>
+  <div class="flex flex-col items-center justify-center bg-black" style="min-height: 100dvh; padding: 2vh 1rem;">
+    <div class="flex flex-col items-center w-full">
+      <div class="flex items-center justify-center" style="height: 40dvh;">
         <img
           src="/switch.svg"
           alt="Spotlight Logo"
-          class="w-60 h-60 mx-auto mb-10"
+          class="mx-auto object-contain"
+          style="height: 100%; width: auto; max-width: 90vw;"
         />
       </div>
-      <h1 class="text-center font-bold text-white uppercase tracking-wide mb-16">
-        <span class="text-4xl">Turn on the</span><br>spotlight!
+      <h1 class="text-center font-bold text-white uppercase tracking-wide mt-4 mb-8"
+          style="width: 90vw; font-size: clamp(22px, 7vw, 48px); line-height: 1.1;">
+        <span>Turn on the</span><br>spotlight!
       </h1>
       <button
         @click="signInWithGoogle"
         :disabled="authStore.loading"
-        class="w-full px-4 py-2 mb-4 bg-primary text-secondary transition-colors flex items-center justify-center gap-4 hover:bg-tertiary hover:text-black"
+        class="px-4 py-3 mb-4 bg-primary text-secondary transition-colors flex items-center justify-center gap-4 hover:bg-tertiary hover:text-black"
+        style="width: 70vw; max-width: 400px;"
       >
         <div>
           <img class="w-5 h-5" src="/googlelogo.svg" alt="Google Logo" />
@@ -24,7 +27,8 @@
       <button
         @click="signInWithGithub"
         :disabled="authStore.loading"
-        class="w-full px-4 py-2 mb-4 bg-primary text-secondary transition-colors flex items-center justify-center gap-4 hover:bg-tertiary hover:text-black"
+        class="px-4 py-3 mb-4 bg-primary text-secondary transition-colors flex items-center justify-center gap-4 hover:bg-tertiary hover:text-black"
+        style="width: 70vw; max-width: 400px;"
       >
         <div>
           <img class="w-5 h-5" src="/githubLogo.svg" alt="GitHub Logo" />
