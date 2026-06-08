@@ -7,7 +7,7 @@
              style="max-width: 100vw;">
       </div>
 
-    <div class="absolute items-center flex justify-center gap-x-[40px] w-[60vw]"
+    <div class="absolute items-center flex justify-center gap-x-[3vw] w-[60vw]"
          style="top: min(82dvh, 82dvh); bottom: unset;">
       <router-link
         v-for="link in homeLinks"
