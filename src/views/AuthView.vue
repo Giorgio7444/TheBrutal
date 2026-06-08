@@ -21,7 +21,7 @@
 
       <div>
 
-        <img class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" src="../../../assets/googlelogo.svg" alt="Google Logo" />
+        <img class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" src="../../assets/googlelogo.svg" alt="Google Logo" />
 
       </div>
 
@@ -37,7 +37,7 @@
       >
       <div>
 
-        <img class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" src="../../../assets/githubLogo.svg" alt="GitHub Logo" />
+        <img class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" src="../../assets/githubLogo.svg" alt="GitHub Logo" />
 
       </div>
               <span class="font-medium text-inherit">
