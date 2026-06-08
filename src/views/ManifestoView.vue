@@ -7,7 +7,7 @@
           Manifesto<br>Post-brutalista
         </h1>
         </div>
-        <p class="mt-[5vw] text-2xl text-center leading-relaxed mb-[20vw]">
+        <p class="mt-[5vw] lg:text-2xl text-center leading-relaxed mb-[20vw]">
 Il tuo <span class="highlight">processo creativo</span> è in crisi. Il mondo vuole omologarti. Non diventare una pedina. <br><br>
 Ti stanno costringendo velocemente a de-personalizzarti. L’<span class="highlight">intelligenza artificiale</span> è entrata di peso all’interno della vita dei creativi, plasmandone il pensiero. Questo rappresenta la morte, non solo delle idee ma dell’essenza del creativo.<br><br>
 L’intelligenza artificiale ti sta spegnendo e tu ti genufletti per la paura di trovarti senza idee o che le tue idee non siano all’altezza. Tutti i creativi della storia hanno dovuto fare i conti con un foglio bianco e hanno creato dei capolavori. L’intelligenza artificiale è arrivata per toglierti questo “peso” e tu hai abboccato.<br><br>
