@@ -6,7 +6,7 @@
 
     </div>
   </div>
-  <div class="bg-secondary text-primary flex flex-col items-center">
+  <div class="bg-secondary text-primary max-w-[90vw] flex flex-col items-center">
     <div class="w-full py-8 overflow-hidden">
       <div class="max-w-4xl mx-auto mb-16">
         <input
