@@ -1,12 +1,12 @@
 <template>
-  <div class="mx-auto w-full max-w-[90vw] pt-8">
+  <div class=" w-full pt-8">
     <div class="pb-8">
         <h1 class="flex items-center justify-center text-center text-primary uppercase">Designers</h1>
         <p class="flex items-center justify-center text-center text-s uppercase text-primary/50">Quei designer che hanno reso l'Italia la patria del graphic design</p>
 
     </div>
   </div>
-  <div class="bg-secondary text-primary max-w-[90vw] flex flex-col items-center">
+  <div class="bg-secondary text-primary flex flex-col items-center">
     <div class="w-full py-8 overflow-hidden">
       <div class="max-w-4xl mx-auto mb-16">
         <input
@@ -31,10 +31,10 @@
       </div>
 
       <div
-        v-else
-        class="grid gap-0 w-full max-w-[100vw] mb-[5vh]"
-        :style="gridStyle"
-      >
+      v-else
+      class="grid gap-0 w-full mb-[5vh]"
+      :style="gridStyle"
+    >
         <div v-for="post in filteredPosts" :key="post.id" :style="cardStyle">
           <ArticleCard :article="post" to-base="/blog" />
         </div>
@@ -57,13 +57,7 @@ const search = ref('')
 const isMobile = ref(window.innerWidth < 768)
 
 const gridStyle = computed(() => ({
-  gridTemplateColumns: isMobile.value ? 'repeat(2, 50vw)' : 'repeat(4, 25vw)',
-}))
-
-const cardStyle = computed(() => ({
-  width: isMobile.value ? '50vw' : '25vw',
-  margin: 0,
-  padding: 0,
+  gridTemplateColumns: isMobile.value ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
 }))
 
 const filteredPosts = computed(() => {
