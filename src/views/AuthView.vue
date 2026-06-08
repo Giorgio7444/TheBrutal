@@ -4,7 +4,7 @@
       <div>
 
         <img
-          src="../assets/switch.svg"
+          src="../../assets/switch.svg"
           alt="Spotlight Logo"
           class="w-60 h-60 mx-auto mb-10"
         />
