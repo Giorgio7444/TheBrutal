@@ -41,3 +41,7 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 serviceAccount.json
+
+.env
+.env.local
+.env.*.local

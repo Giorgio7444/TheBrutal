@@ -4,12 +4,12 @@ import { getFirestore, initializeFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBRgb5BQLkco0d0kseS_QBemAi8hXMXJEY",
-  authDomain: "thebrutal-b5a44.firebaseapp.com",
-  projectId: "thebrutal-b5a44",
-  storageBucket: "thebrutal-b5a44.firebasestorage.app",
-  messagingSenderId: "327739332865",
-  appId: "1:327739332865:web:66dd7a9f6f5b13accb6300"
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
 const requiredKeys = ['apiKey', 'authDomain', 'projectId', 'messagingSenderId', 'appId']
